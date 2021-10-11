@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
+    <h2> Participant : {{ user.prenom }} {{  user.nom |slice(0,1) }}</h2>
+
+    <h3> Filter les sorties :</h3>
+
+
+   <div>
+       {{ form-start(filtreAccueil) }}
+    {{ form-widget(filtreAccueil) }}
+    <button>Rechercher</button>
+    {{ form-end(filtreAccueil) }}
+       <div>
+       <div>
+       <input type="checkbox">
+       <label>Sorties dont je suis l'organisateur/trice</label>
+       </div>
+           <div>
+           <input type="checkbox">
+           <label>Sorties auxquelles je suis inscrit/e</label>
+       </div>
+           <div>
+               <input type="checkbox">
+               <label>Sorties auxquelles je ne suis pas inscrit/e</label>
+           </div>
+           <div>
+               <input type="checkbox">
+               <label>Sorties passées</label>
+           </div>
+       </div>
+   </div>
+
+    <article>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Nom de la sortie
+                    </th>
+                    <th>
+                        Date de la sortie
+                    </th>
+                    <th>
+                         Clôture
+                    </th>
+                    <th>
+                        Inscrits/places
+                    </th>
+                    <th>
+                        Etat
+                    </th>
+                    <th>
+                        Inscrit
+                    </th>
+                    <th>
+                        Organisateur
+                    </th>
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for sortie in sorties%}
+                <tr>
+                    {{ sortie.nom }}
+                </tr>
+                <tr>
+                    {{ sortie.date }}
+                </tr>
+                <tr>
+                    {{ sortie.dateLimite }}
+                </tr>
+                <tr>
+                    {{ sortie.participant | length }}/{{ sortie.nombreInscriptionMax }}
+                </tr>
+                <tr>
+                    {{ etat.libelle }}
+                </tr>
+                <tr>
+                    {% for idParticipant in sortie.participant %}
+                    {% if app.user.id == idParticipant %}
+                    X
+                    {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {{ sortie.organisateur }}
+                </tr>
+                <tr>
+                    {% if app.user.id != sortie.organisateur or (app.user.id == sortie.organisateur and sortie.etat != "En création") %}
+                        <a href="#" >Afficher</a>
+                    {% else %}
+                        <a href="#">Modifier</a>
+                    {% endif %}
+                    {% if sortie.organisateur != app.user.id %}
+                        {% for idParticipant in sortie.participant %}
+                            {% if app.user.id == idParticipant %}
+                                <a href="#"> - se désister</a>
+                                {% elseif sortie.participant.length < sortie.nombreInscriptionsMax and sortie.dateLimite > date() %}
+                                    <a href="#"> - s'inscrire</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% if  sortie.dateLimite > date() %}
+                        <a href="#">Annuler</a>
+                        {% endif %}
+                        {% if sortie.etat == "En création" %}
+                        <a href="#">Publier</a>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </article>
+
+    <div>
+        <a href="#" type="button">Créer une sortie</a>
+    </div>
+
+{% endblock %}
