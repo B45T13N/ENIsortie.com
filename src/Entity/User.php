@@ -6,10 +6,12 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface
 {
@@ -52,7 +54,7 @@ class User implements UserInterface
     private $telephone;
 
     /**
-     * @ORM\Column(type="string", length=70)
+     * @ORM\Column(type="string", length=70, unique=true)
      */
     private $email;
 
@@ -115,9 +117,12 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if ($this->admin==true){
+            $roles[] = 'ROLE_ADMIN';
+        }
+        else {
+            $roles[] = 'ROLE_USER';
+        }
 
         return array_unique($roles);
     }
