@@ -19,15 +19,13 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
 
         for($i = 1; $i <= 10 ; $i++) {
             $sortie = new Sortie();
-            $etat = new Etat();
-            $etat->setLibelle("En cours");
             $sortie->setNom($faker->unique->word());
             $sortie->setDescription($faker->realText());
             $sortie->setCampus($this->getReference(Campus::class.'_'.mt_rand(1,5)));
             $sortie->setDate($faker->dateTimeBetween('-1 months', 'now'));
             $sortie->setDateLimite($faker->dateTimeBetween($sortie->getDate(), 'now'));
             $sortie->setDuree($faker->randomNumber(3, false));
-            $sortie->setEtat($etat);
+            $sortie->setEtat($this->getReference(Etat::class.'_'.mt_rand(1,6)));
             $sortie->setLieu($this->getReference(Lieu::class.'_'.mt_rand(1,10)));
             $sortie->setNombreInscriptionsMax($faker->randomNumber(2, false));
             $sortie->setOrganisateur($this->getReference(User::class.'_'.mt_rand(1,10)));
@@ -45,6 +43,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             UserFixtures::class,
             CampusFixtures::class,
             LieuFixtures::class,
+            EtatFixtures::class,
 
         ];
     }
