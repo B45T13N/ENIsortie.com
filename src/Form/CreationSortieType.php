@@ -2,9 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
+use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +22,7 @@ class CreationSortieType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('date', DateType::class, [
+            ->add('date', DateTimeType::class, [
                 'html5' => true,
                 'widget' => 'single_text',
             ])
@@ -29,19 +35,19 @@ class CreationSortieType extends AbstractType
             ])
             ->add('nombreInscriptionsMax')
             ->add('description')
-            ->add('lieu')
-            ->add('etat', ChoiceType::class, [
-                'choices' => [
-                    'Créée' => 'Créée',
-                    'Ouverte' => 'Ouverte',
-                    'Clôturée' => 'Clôturée',
-                    'En cours' => 'En cours',
-                    'Passée' => 'Passée',
-                    'Annulée' => 'Annulée'
-                ],
+            ->add('lieu', EntityType::class, [
+                'class' => Lieu::class,
+                'choice_label' => 'nom',
+            ])
+            ->add('etat', EntityType::class, [
+                'class' => Etat::class,
+                'choice_label' => 'libelle',
                 'multiple' => false
             ])
-            ->add('campus', ChoiceType::class)
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'nom',
+            ])
         ;
     }
 
