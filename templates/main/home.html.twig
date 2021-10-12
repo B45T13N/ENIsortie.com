@@ -68,52 +68,54 @@
 
             {% for sortie in sorties%}
                 <tr>
-                    {{ sortie.nom }}
-                </tr>
-                <tr>
-                    {{ sortie.date }}
-                </tr>
-                <tr>
-                    {{ sortie.dateLimite }}
-                </tr>
-                <tr>
-                    {{ sortie.participant | length }}/{{ sortie.nombreInscriptionMax }}
-                </tr>
-                <tr>
-                    {{ etat.libelle }}
-                </tr>
-                <tr>
-                    {% for idParticipant in sortie.participant %}
-                    {% if app.user.id == idParticipant %}
-                    X
-                    {% endif %}
-                    {% endfor %}
-                </tr>
-                <tr>
-                    {{ sortie.organisateur }}
-                </tr>
-                <tr>
-                    {% if app.user.id != sortie.organisateur or (app.user.id == sortie.organisateur and sortie.etat != "En création") %}
-                        <a href="#" >Afficher</a>
-                    {% else %}
-                        <a href="#">Modifier</a>
-                    {% endif %}
-                    {% if sortie.organisateur != app.user.id %}
-                        {% for idParticipant in sortie.participant %}
-                            {% if app.user.id == idParticipant %}
-                                <a href="#"> - se désister</a>
-                                {% elseif sortie.participant.length < sortie.nombreInscriptionsMax and sortie.dateLimite > date() %}
-                                    <a href="#"> - s'inscrire</a>
+                    <td>
+                        {{ sortie.nom }}
+                    </td>
+                    <td>
+                        {{ sortie.date|date }}
+                    </td>
+                    <td>
+                        {{ sortie.dateLimite|date }}
+                    </td>
+                    <td>
+                        {{ sortie.participant|length }}/10
+                    </td>
+                    <td>
+                        {{ sortie.etat.libelle }}
+                    </td>
+{#                    <td>#}
+{#                        {% for idParticipant in sortie.user.id %}#}
+{#                        {% if app.user.id == idParticipant %}#}
+{#                        X#}
+{#                        {% endif %}#}
+{#                        {% endfor %}#}
+{#                    </td>#}
+                    <td>
+                        {{ sortie.organisateur.nom }}
+                    </td>
+                    <td>
+                        {% if app.user.id != sortie.organisateur.id or (app.user.id == sortie.organisateur.id and sortie.etat.libelle != "En création") %}
+                            <a href="#" >Afficher</a>
+                        {% else %}
+                            <a href="#">Modifier</a>
+                        {% endif %}
+                        {% if sortie.organisateur.id != app.user.id %}
+                            {% for idParticipant in sortie.participant %}
+                                {% if app.user.id == idParticipant %}
+                                    <a href="#"> - se désister</a>
+                                    {% elseif sortie.participant.length < sortie.nombreInscriptionsMax and sortie.dateLimite > date() %}
+                                        <a href="#"> - s'inscrire</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% if  sortie.dateLimite > date() %}
+                                <a href="#">Annuler</a>
                             {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {% if  sortie.dateLimite > date() %}
-                            <a href="#">Annuler</a>
+                            {% if sortie.etat == "En création" %}
+                                <a href="#">Publier</a>
+                            {% endif %}
                         {% endif %}
-                        {% if sortie.etat == "En création" %}
-                            <a href="#">Publier</a>
-                        {% endif %}
-                    {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -22,14 +22,12 @@ class SortieRepository extends ServiceEntityRepository
 
     public function affichageSortieAccueil()
     {
-        $dateJour = new \DateTime();
         $queryBuilder = $this->createQueryBuilder('s');
-        $queryBuilder->join('s.etat', 'e')->addSelect('e');
-        $queryBuilder->join('s.participant', 'su')->addSelect('su');
-        $queryBuilder->join('s.organisateur', 'u')->addSelect('u');
+        $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
+
+        $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
 
         $query = $queryBuilder -> getQuery();
-
         return $query->getResult();
     }
 
