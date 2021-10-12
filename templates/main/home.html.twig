@@ -2,21 +2,21 @@
 
 {% block body %}
     <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
-    <h2> Participant : {{ user.prenom }} {{  user.nom |slice(0,1) }}</h2>
+    <h2> Participant : {{ app.user.prenom }} {{  app.user.nom |slice(0,1) }}</h2>
 
     <h3> Filter les sorties :</h3>
 
 
    <div>
-       {{ form-start(filtreAccueil) }}
-    {{ form-widget(filtreAccueil) }}
-    <button>Rechercher</button>
-    {{ form-end(filtreAccueil) }}
+{#        {{ form-start(filtreAccueil) }}
+        {{ form-widget(filtreAccueil) }}
+        <button>Rechercher</button>
+        {{ form-end(filtreAccueil) }}#}
        <div>
-       <div>
-       <input type="checkbox">
-       <label>Sorties dont je suis l'organisateur/trice</label>
-       </div>
+           <div>
+           <input type="checkbox">
+           <label>Sorties dont je suis l'organisateur/trice</label>
+           </div>
            <div>
            <input type="checkbox">
            <label>Sorties auxquelles je suis inscrit/e</label>
@@ -108,10 +108,12 @@
                         {% endfor %}
                     {% else %}
                         {% if  sortie.dateLimite > date() %}
-                        <a href="#">Annuler</a>
+                            <a href="#">Annuler</a>
                         {% endif %}
                         {% if sortie.etat == "En création" %}
-                        <a href="#">Publier</a>
+                            <a href="#">Publier</a>
+                        {% endif %}
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
@@ -122,4 +124,8 @@
         <a href="#" type="button">Créer une sortie</a>
     </div>
 
+{% endblock %}
+
+{% block title %}
+    {{ parent() }} | Notre super page d'accueil
 {% endblock %}
