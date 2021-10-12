@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    {{ form_start(profileForm) }}
+        {{ form_widget(profileForm) }}
+        <button>Enregistrer</button>
+    <button>Annuler</button>
+    {{ form_end(profileForm) }}
+{% endblock %}
+
