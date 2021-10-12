@@ -14,22 +14,22 @@ class ProfileController extends AbstractController
 {
     /**
      * @Route("/profil", name="profile_monProfile")
+     *
      */
-    public function monProfile(
-        Request $request,
-        EntityManagerInterface $entityManager
-        ): Response
+    public function monProfile(Request $request)
         {
-        $profile = new User();
-        $profileForm = $this->createForm(ProfileType::class, $profile);
+            $user = $this->getUser();
+
+        $profileForm = $this->createForm(ProfileType::class, $user);
 
         $profileForm->handleRequest($request);
 
         if ($profileForm->isSubmitted() && $profileForm->isValid()){
-            $entityManager->persist($profile);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Votre profil a bien été modifier !!');
+            $this->addFlash('message', 'Votre profil a bien été modifier !!');
             return $this->redirectToRoute('sortie_liste', ['id' => $profile->getId()]);
 
         }

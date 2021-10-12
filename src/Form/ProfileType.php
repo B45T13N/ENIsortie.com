@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -33,13 +35,9 @@ class ProfileType extends AbstractType
             ->add('password', TextType::class, [
                 'label' => 'Mot de passe'
             ])
-            ->add('campus', ChoiceType::class, [
-                'choices' => [
-                    'Nantes' => '3',
-                    'Rennes' => '2',
-                    'Niort' => '1',
-                    'Quimper' => '4'
-                ],
+            ->add('campus', EntityType::class, [
+                'class'=>Campus::class,
+                'choice_label' => 'nom',
                 'multiple' => false
             ])
         ;
