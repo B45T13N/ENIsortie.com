@@ -2,7 +2,8 @@
 
 {% block body %}
     <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
-    <h2> Participant : {{ app.user.prenom }} {{  app.user.nom |slice(0,1) }}.</h2>
+    <h2> Participant : {{ app.user.prenom }}.{{  app.user.nom |slice(0,1) }}</h2>
+    {{ app.user.id }}
 
     <h3> Filter les sorties :</h3>
 
@@ -72,48 +73,50 @@
                         {{ sortie.nom }}
                     </td>
                     <td>
-                        {{ sortie.date|date }}
+                        {{ sortie.date|date('d/m/Y') }}
                     </td>
                     <td>
-                        {{ sortie.dateLimite|date }}
+                        {{ sortie.dateLimite|date('d/m/Y') }}
                     </td>
                     <td>
-                        {{ sortie.participant|length }}/10
+                        {{ sortie.participant|length }}/{{ sortie.nombreInscriptionsMax }}
                     </td>
                     <td>
                         {{ sortie.etat.libelle }}
                     </td>
-{#                    <td>#}
-{#                        {% for idParticipant in sortie.user.id %}#}
-{#                        {% if app.user.id == idParticipant %}#}
-{#                        X#}
-{#                        {% endif %}#}
-{#                        {% endfor %}#}
-{#                    </td>#}
                     <td>
-                        {{ sortie.organisateur.nom }}
+                        {% for participant in sortie.participant %}
+                            {% if app.user.id is same as(participant.id) %}
+                                X
+                            {% endif %}
+                        {% endfor %}
                     </td>
                     <td>
-                        {% if app.user.id != sortie.organisateur.id or (app.user.id == sortie.organisateur.id and sortie.etat.libelle != "En création") %}
+                        {{ sortie.organisateur.prenom }}.{{ sortie.organisateur.nom|slice(0,1) }}
+                    </td>
+                    <td>
+                        {% if app.user.id != sortie.organisateur.id%}
                             <a href="#" >Afficher</a>
-                        {% else %}
-                            <a href="#">Modifier</a>
-                        {% endif %}
-                        {% if sortie.organisateur.id != app.user.id %}
-                            {% for idParticipant in sortie.participant %}
-                                {% if app.user.id == idParticipant %}
-                                    <a href="#"> - se désister</a>
-                                    {% elseif sortie.participant.length < sortie.nombreInscriptionsMax and sortie.dateLimite > date() %}
-                                        <a href="#"> - s'inscrire</a>
+                            {% set break = false %}
+                            {% for participant in sortie.participant %}
+                                {% if app.user.id is same as(participant.id) %}
+                                    <a href="#">- Se désister</a>
+                                    {% set break = true %}
+                                {% elseif loop.last and not break %}
+                                        <a href="#">- S'inscrire1</a>
                                 {% endif %}
+                            {% else %}
+                                <a href="#">- S'inscrire2</a>
                             {% endfor %}
                         {% else %}
-                            {% if  sortie.dateLimite > date() %}
+                            {% if  sortie.dateLimite > date('now') or sortie.etat.libelle is same as("Ouverte") or sortie.etat.libelle is same as("Créée") %}
                                 <a href="#">Annuler</a>
+                                <a href="#">Modifier</a>
                             {% endif %}
-                            {% if sortie.etat == "En création" %}
+                            {% if sortie.etat.libelle is same as("En création") %}
                                 <a href="#">Publier</a>
                             {% endif %}
+                            <a href="#" >Afficher</a>
                         {% endif %}
                     </td>
                 </tr>

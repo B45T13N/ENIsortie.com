@@ -24,7 +24,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         for($i = 1; $i <= 10 ; $i++) {
             $user = new User();
             $user->setCampus($this->getReference(Campus::class.'_'.mt_rand(1,5)));
-            $user->setNom($faker->name());
+            $user->setNom($faker->lastName());
             $user->setRoles(['ROLE_USER']);
             $user->setActif(true);
             $user->setEmail($faker->email());
@@ -33,7 +33,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setAdmin(true);
             $user->setPrenom($faker->firstName());
             $user->setTelephone(0101010101);
-            $user->setUsername($user->getPrenom().'_'.$user->getNom());
+            $user->setUsername($user->getPrenom().'_'.mt_rand(1,50));
 
             $manager->persist($user);
             $this->addReference(User::class.'_'.$i, $user);
