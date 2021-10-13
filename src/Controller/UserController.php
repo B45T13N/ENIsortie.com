@@ -43,7 +43,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/modifier", name="editProfile", methods={put})
+     * @Route("/modifier", name="editProfile")
      */
     public function editProfile(UserRepository $userRepository, Request $request)
     {
