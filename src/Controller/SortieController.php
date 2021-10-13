@@ -19,10 +19,7 @@ class SortieController extends AbstractController
      */
     public function accueil(SortieRepository $sortieRepository): Response
     {
-        $sorties = $sortieRepository->affichageSortieAccueil();
-        return $this->render('base.html.twig', [
-            'sorties' => $sorties,
-        ]);
+        return $this->render('base.html.twig');
     }
 
     /**

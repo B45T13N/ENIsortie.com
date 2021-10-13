@@ -18,8 +18,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreationSortieType extends AbstractType
 {
+
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $etat = new Etat();
         $builder
             ->add('nom')
             ->add('date', DateTimeType::class, [
@@ -39,14 +42,10 @@ class CreationSortieType extends AbstractType
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
             ])
-            ->add('etat', EntityType::class, [
-                'class' => Etat::class,
-                'choice_label' => 'libelle',
-                'multiple' => false
-            ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
+                'disabled' => true,
             ])
         ;
     }
