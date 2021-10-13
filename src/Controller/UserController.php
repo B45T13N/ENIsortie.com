@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ProfileType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,13 +52,14 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="profile")
+     * @Route("/pro", name="profile")
      */
     public function profile(Request $request, UserRepository $userRepository): Response
     {
-        $userId = $this->getUser();
-        $user = $userRepository->find($userId);
-
+        $user = new User();
+        dump($user);
+        $user = $userRepository->find(6);
+        dump($user);
         return $this->render('user/profile.html.twig', ["users" => $user]);
     }
 }
