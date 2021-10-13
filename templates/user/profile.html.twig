@@ -6,23 +6,21 @@
 
 {% block body %}
    <h1>{{ app.user.username }}</h1>
-    <tr>
-    Prénom :
-        <td>{{ app.user.prenom }}</td>
-
-    Nom :
-        <td>{{ app.user.nom }}</td>
-
-    Téléphone :
-        <td>{{ app.user.telephone }}</td>
-
-    Email :
-        <td>{{ app.user.email }}</td>
-
-    Campus :
-        <td>{{ app.user.prenom }}</td>
-    </tr>
-
+    <div>
+        <a>Prénom : {{ app.user.prenom }}</a>
+    </div>
+    <div>
+        <a>Nom : {{ app.user.nom }}</a>
+    </div>
+    <div>
+        <a> Téléphone : {{ app.user.telephone }}</a>
+    </div>
+    <div>
+        <a>Email : {{ app.user.email }}</a>
+    </div>
+    <div>
+        <a>Campus : {{ app.user.campus.nom}}</a>
+    </div>
     <a type="button" {{ path('sortie_liste') }}>Retour</a>
 {% endblock %}
 

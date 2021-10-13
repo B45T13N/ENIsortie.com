@@ -6,40 +6,15 @@ use App\Form\ProfileType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/profil", name="profile_")
+ * @Route("/profil", name="user_")
  */
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/", name="profile")
-     */
-    public function profile(Request $request)
-    {
-        $user = $this->getUser();
-
-        $getForm = $this->createForm(ProfileType::class, $user);
-
-        $getForm->handleRequest($request);
-
-        if ($getForm->isSubmitted() && $getForm->isValid()){
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            $this->addFlash('message', 'Votre profil a bien été modifier !!');
-            return $this->redirectToRoute('sortie_liste', ['id' => $user->getId()]);
-
-        }
-
-        return $this->render('user/profile.html.twig', [
-            'getForm' => $getForm->createView()
-        ]);
-    }
-
     /**
      * @Route("/modifier", name="editProfile")
      */
@@ -73,5 +48,16 @@ class UserController extends AbstractController
         return $this->render('user/editProfile.html.twig', [
             'editProfileForm' => $editProfileForm->createView()
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="profile")
+     */
+    public function profile(Request $request, UserRepository $userRepository): Response
+    {
+        $userId = $this->getUser();
+        $user = $userRepository->find($userId);
+
+        return $this->render('user/profile.html.twig', ["users" => $user]);
     }
 }
