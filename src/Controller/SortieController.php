@@ -45,9 +45,13 @@ class SortieController extends AbstractController
 
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
             $data = $filtreForm->getData();
-
-            $sorties = $sortieRepository->filtreSortieAccueil($data->getNom(), $data->getCampus(), $data->getDate(), $data->getDateLimite());
-
+            if($data->getNom())
+            {
+                $sorties = $sortieRepository->filtreSortieAccueil($data->getNom(), $data->getCampus(), $data->getDate(), $data->getDateLimite());
+            } else
+            {
+                $sorties = $sortieRepository->filtreSortieAccueil($data->getNom(), $data->getCampus(), $data->getDate(), $data->getDateLimite());
+            }
             $this->addFlash('success', 'Votre recherche :');
             return $this->render('main/home.html.twig', [
                 'sorties' => $sorties,
