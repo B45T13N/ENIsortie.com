@@ -7,6 +7,7 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,13 +33,16 @@ class ProfileType extends AbstractType
             ->add('email', TextType::class, [
                 'label' => 'Email'
             ])
-            ->add('password', TextType::class, [
+            ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe'
+            ])
+            ->add('confirmPassword', PasswordType::class, [
+                'label' => 'Confirmation'
             ])
             ->add('campus', EntityType::class, [
                 'class'=>Campus::class,
                 'choice_label' => 'nom',
-                'multiple' => false
+                'disabled' => true
             ])
         ;
     }
