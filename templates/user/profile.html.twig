@@ -5,10 +5,24 @@
 {% endblock %}
 
 {% block body %}
-   <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
-    {{ form_start(getForm) }}
-        {{ form_widget(getForm) }}
-    {{ form_end(getForm) }}
+   <h1>{{ app.user.username }}</h1>
+    <tr>
+    Prénom :
+        <td>{{ app.user.prenom }}</td>
+
+    Nom :
+        <td>{{ app.user.nom }}</td>
+
+    Téléphone :
+        <td>{{ app.user.telephone }}</td>
+
+    Email :
+        <td>{{ app.user.email }}</td>
+
+    Campus :
+        <td>{{ app.user.prenom }}</td>
+    </tr>
+
     <a type="button" {{ path('sortie_liste') }}>Retour</a>
 {% endblock %}
 

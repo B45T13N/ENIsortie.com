@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\ProfileType;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -56,9 +53,7 @@ class UserController extends AbstractController
             $editProfileForm->handleRequest($request);
             if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()){
                 $entityManager = $this->getDoctrine()->getManager();
-                dump($user);
                 $entityManager->persist($user);
-                dump($user);
                 $entityManager->flush();
 
                 $this->addFlash('message', 'Votre profil a bien été modifier !!');
