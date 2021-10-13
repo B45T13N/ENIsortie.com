@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\CreationSortieType;
+use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,30 +41,75 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/creationSortie", name="creationSortie")
+     * @Route("/CreateSortie/", name="creationSortie")
      */
     public function create(
         Request                $request,
-        EntityManagerInterface $entityManager): Response
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository,
+        SortieRepository $sortieRepository
+
+    ): Response
     {
         $currentUser = $this->getUser();
 
-        $sortie = new Sortie();
-        $sortie->setOrganisateur($currentUser);
-        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
 
-        $sortieForm->handleRequest($request);
+            $sortie = new Sortie();
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            $entityManager->persist($sortie);
-            $entityManager->flush();
+            $sortie->setOrganisateur($currentUser);
+            $sortie->setCampus($currentUser->getCampus());
+            $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
 
-            $this->addFlash('success', 'Sortie ajoutée avec succès');
-            return $this->redirectToRoute('sortie_liste');
-        }
+            $sortieForm->handleRequest($request);
 
-        return $this->render('sortie/creationSortie.html.twig', [
-            'sortieForm' => $sortieForm->createView(),
-        ]);
+            if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+                $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                $sortie->setEtat($etat);
+                $entityManager->persist($sortie);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Sortie ajoutée avec succès');
+                return $this->redirectToRoute('sortie_liste');
+            }
+            return $this->render('sortie/creationSortie.html.twig', [
+                'sortieForm' => $sortieForm->createView(),
+            ]);
+
     }
+//   /**
+//     *
+//     * @Route("/Sortie/{id}", name="SortiePublish")
+//     */
+//
+//    public function publish(
+//        Request                $request,
+//        EntityManagerInterface $entityManager,
+//        EtatRepository $etatRepository,
+//        SortieRepository $sortieRepository,
+//        int $id=0) {
+//
+//
+//        $sortie = $sortieRepository->find($id);
+//        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+//
+//        $sortieForm->handleRequest($request);
+//
+//        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+//            $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+//            $sortie->setEtat($etat);
+//            $entityManager->persist($sortie);
+//            $entityManager->flush();
+//
+//            $this->addFlash('success', 'Sortie ajoutée avec succès');
+//            return $this->redirectToRoute('sortie_liste');
+//
+//        }
+//        return $this->render('sortie/creationSortie.html.twig', [
+//            'sortieForm' => $sortieForm->createView(),
+//        ]);
+//
+//    }
+
+
 }
+
