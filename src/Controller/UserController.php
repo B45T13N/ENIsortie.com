@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use App\Form\ProfileType;
-use App\Repository\ResetPasswordRequestRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @Route("/profil", name="profile_")
