@@ -48,6 +48,7 @@ class CreationSortieType extends AbstractType
                 'class' => Campus::class,
                 'choice_label' => 'nom',
             ])
+
         ;
     }
 
