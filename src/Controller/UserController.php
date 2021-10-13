@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/profil", name="profile_")
@@ -42,7 +43,7 @@ class UserController extends AbstractController
     /**
      * @Route("/modifier", name="editProfile")
      */
-    public function editProfile(UserRepository $userRepository, Request $request)
+    public function editProfile(UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
         $user = $this->getUser();
 
@@ -52,6 +53,12 @@ class UserController extends AbstractController
             $editProfileForm->handleRequest($request);
 
             if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()){
+                $user->setPassword(
+                    $userPasswordEncoderInterface->encodePassword(
+                        $user,
+                        $editProfileForm->get('plainPassword')->getData()
+                    )
+                );
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
