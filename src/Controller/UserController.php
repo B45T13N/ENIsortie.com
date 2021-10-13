@@ -49,8 +49,8 @@ class UserController extends AbstractController
         if($userRepository->find($user)){
 
             $editProfileForm = $this->createForm(ProfileType::class, $user);
-
             $editProfileForm->handleRequest($request);
+
             if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()){
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
