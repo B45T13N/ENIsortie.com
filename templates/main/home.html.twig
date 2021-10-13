@@ -1,17 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
-    <h2> Participant : {{ app.user.prenom }}.{{  app.user.nom |slice(0,1) }}</h2>
-
-    <h3> Filter les sorties :</h3>
+    <div>
+        <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
+        <h2> Participant : {{ app.user.prenom }}.{{  app.user.nom |slice(0,1) }}</h2>
+    </div>
 
 
    <div>
-{#      {{ form-start(filtreAccueil) }}
-        {{ form-widget(filtreAccueil) }}
-        <button>Rechercher</button>
-        {{ form-end(filtreAccueil) }}#}
+    <div>
+        <h3> Filter les sorties :</h3>
+
+        {{ form_start(filtreForm) }}
+        {{ form_widget(filtreForm) }}
+        <button type="submit">Rechercher</button>
+        {{ form_end(filtreForm) }}
+    </div>
        <div>
            <div>
            <input type="checkbox">

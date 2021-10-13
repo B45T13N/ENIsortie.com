@@ -26,6 +26,16 @@
         <header>
             {% include 'inc/nav.html.twig'%}
         </header>
+
+        {%for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+
             {% block body %}
                 Bienvenu sur Sortie.com !
             {% endblock %}
