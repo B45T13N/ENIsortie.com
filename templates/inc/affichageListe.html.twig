@@ -31,7 +31,7 @@
     <tbody>
 
     {% for sortie in sorties%}
-        {% if app.user.id is same as(sortie.organisateur.id) and sortie.etat.libelle is same as("Créée") or sortie.etat.libelle is same as("Activité en cours")
+        {% if app.user.id is same as(sortie.organisateur.id) and sortie.etat.libelle is same as("Créée") or sortie.etat.libelle is same as("Activité en cours") or sortie.etat.libelle is same as("Ouverte")
             or (app.user.id != sortie.organisateur.id and sortie.etat.libelle != "Créée") %}
             <tr>
                 <td>
@@ -81,8 +81,8 @@
                     {% else %}
                         {#                            Condition pour l'affichage des boutons d'organisateurs #}
                         {% if app.user.id == sortie.organisateur.id and sortie.dateLimite > date('now') or sortie.etat.libelle is same as("Ouverte") or sortie.etat.libelle is same as("Créée") %}
-                            <a href="#">Annuler</a>
-                            <a href="#">Modifier</a>
+                            <a href="{{ path('sortie_cancelSortie', { 'idSortie':sortie.id })}}">Annuler</a>
+                            <a href="{{ path('sortie_creationSortie') }}">Modifier</a>
                         {% endif %}
                         {% if sortie.etat.libelle is same as("Créée") and app.user.id is same as(sortie.organisateur.id) %}
                             <a href="#">Publier</a>

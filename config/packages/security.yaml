@@ -41,11 +41,6 @@ security:
         ROLE_ADMIN: ROLE_USER
 
     access_control:
-<<<<<<<<< Temporary merge branch 1
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/profile, roles: ROLE_USER }
-=========
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/home, roles: ROLE_USER }
-        - { path: ^/test, roles: ROLE_USER }
->>>>>>>>> Temporary merge branch 2
+            - { path: ^/admin, roles: ROLE_ADMIN }
+            - { path: ^/home, roles: ROLE_USER }
+            - { path: ^/test, roles: ROLE_USER }
