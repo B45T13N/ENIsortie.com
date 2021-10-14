@@ -143,6 +143,41 @@ class SortieController extends AbstractController
     }
 
     /**
+     * @Route("/affichageSortie/{id}", name="affichageSortie")
+     */
+    public function affichageSortie(SortieRepository $sortieRepository, Request $request, int $id): Response
+    {
+
+        $sortieDetails = $sortieRepository->affichageSortieDetails($id);
+        $listeParticipants = $sortieDetails[0]->getParticipant();
+        return $this->render('sortie/affichageSortie.html.twig',
+                ["sortieDetails" => $sortieDetails[0],
+                "listeParticipants" => $listeParticipants
+            ]);
+
+
+
+    }
+
+
+
+//    /**
+//     * @Route("/CreateLieu/", name="creationLieu")
+//     */
+//    public function createLieu(
+//        Request                $request,
+//        EntityManagerInterface $entityManager
+//    ): Response
+//    {
+//        $lieu = new Lieu();
+//        $lieuForm = $this->createForm(LieuType::class, $lieu);
+//        return $this->render('sortie/createLieu.html.twig', [
+//            'lieuForm' => $lieuForm->createView(),
+//        ]);
+//
+//    }
+
+    /**
      *
      * @Route("/cancelSortie/{idSortie}", name="cancelSortie")
      */

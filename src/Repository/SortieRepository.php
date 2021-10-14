@@ -30,7 +30,7 @@ class SortieRepository extends ServiceEntityRepository
         $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
         $queryBuilder->leftJoin('s.participant', 'su')->addSelect('su');
         $queryBuilder->where('e.libelle != \'Passée\'');
-        $query = $queryBuilder -> getQuery();
+        $query = $queryBuilder->getQuery();
 
         $sorties = $query->getResult();
 
@@ -46,8 +46,8 @@ class SortieRepository extends ServiceEntityRepository
         $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
         $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
         $queryBuilder->leftJoin('s.participant', 'su')->addSelect('su');
-        $queryBuilder->where('s.campus = '.$campus->getId());
-        if($nom !== "") {
+        $queryBuilder->where('s.campus = ' . $campus->getId());
+        if ($nom !== "") {
             $queryBuilder->andWhere('s.nom LIKE :nom');
             $queryBuilder->setParameter('nom', '%' . $nom . '%');
         }
@@ -56,7 +56,7 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('lastDate', $date2);
 
 
-        $query = $queryBuilder -> getQuery();
+        $query = $queryBuilder->getQuery();
 
         $sorties = $query->getResult();
         $this->archivage($sorties);
@@ -89,13 +89,43 @@ class SortieRepository extends ServiceEntityRepository
                 $this->_em->persist($sortie);
             }
 
-            if ($sortie->getEtat()->getLibelle() != 'Activité en cours' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getEtat()->getLibelle() == 'Ouverte' && $sortie->getDate() < new \DateTime($sortie->getDuree(). 'minutes') && $sortie->getDate() > new \DateTime('+24 hours')) {
+            if ($sortie->getEtat()->getLibelle() != 'Activité en cours' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getEtat()->getLibelle() == 'Ouverte' && $sortie->getDate() < new \DateTime($sortie->getDuree() . 'minutes') && $sortie->getDate() > new \DateTime('+24 hours')) {
                 $sortie->setEtat($etatEnCours);
                 $this->_em->persist($sortie);
             }
         }
 
         $this->_em->flush();
+        return $sorties;
+    }
+
+    public function affichageSortieDetails(int $id)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
+        $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
+        $queryBuilder->where('s.id = ' . $id);
+        $query = $queryBuilder->getQuery();
+
+        $sortie = $query->getResult();
+        return $sortie;
+    }
+
+}
+    // /**
+    //  * @return Sortie[] Returns an array of Sortie objects
+    //  */
+    /*
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('s.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 
