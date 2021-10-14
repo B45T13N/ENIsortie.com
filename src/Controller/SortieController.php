@@ -54,7 +54,7 @@ class SortieController extends AbstractController
             $sortie->setCampus($currentUser->getCampus());
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
             if($sortie->getDateLimite()>$sortie->getDate()){
-                $this->addFlash(
+                $this->addFlash('error',
                  'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
                 );
             }
