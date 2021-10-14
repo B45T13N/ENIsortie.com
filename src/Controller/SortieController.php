@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
+use App\Entity\User;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
 use App\Repository\EtatRepository;
@@ -103,6 +104,23 @@ class SortieController extends AbstractController
             ]);
 
     }
+
+    /**
+     * @Route("/RegisterSortie/{idSortie}", name="registrationSortie")
+     */
+    public function register(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager){
+
+
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($idSortie);
+        $sortie->addParticipant($user);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('sortie_liste');
+
+    }
+
 //   /**
 //     *
 //     * @Route("/Sortie/{id}", name="SortiePublish")
