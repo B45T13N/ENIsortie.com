@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
@@ -73,24 +72,28 @@ class SortieController extends AbstractController
     public function create(
         Request                $request,
         EntityManagerInterface $entityManager,
-        EtatRepository $etatRepository,
-        SortieRepository $sortieRepository
-
+        EtatRepository $etatRepository
     ): Response
     {
-        $currentUser = $this->getUser();
-
-
+            $currentUser = $this->getUser();
             $sortie = new Sortie();
-
             $sortie->setOrganisateur($currentUser);
             $sortie->setCampus($currentUser->getCampus());
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+            if($sortie->getDateLimite()>$sortie->getDate()){
+                $this->addFlash('error',
+                 'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
+                );
+            }
 
             $sortieForm->handleRequest($request);
-
+            $etat = $etatRepository;
             if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-                $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                if($request->request->get('cree')){
+                    $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                } else {
+                    $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+                }
                 $sortie->setEtat($etat);
                 $entityManager->persist($sortie);
                 $entityManager->flush();
@@ -103,39 +106,6 @@ class SortieController extends AbstractController
             ]);
 
     }
-//   /**
-//     *
-//     * @Route("/Sortie/{id}", name="SortiePublish")
-//     */
-//
-//    public function publish(
-//        Request                $request,
-//        EntityManagerInterface $entityManager,
-//        EtatRepository $etatRepository,
-//        SortieRepository $sortieRepository,
-//        int $id=0) {
-//
-//
-//        $sortie = $sortieRepository->find($id);
-//        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-//
-//        $sortieForm->handleRequest($request);
-//
-//        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-//            $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
-//            $sortie->setEtat($etat);
-//            $entityManager->persist($sortie);
-//            $entityManager->flush();
-//
-//            $this->addFlash('success', 'Sortie ajoutée avec succès');
-//            return $this->redirectToRoute('sortie_liste');
-//
-//        }
-//        return $this->render('sortie/creationSortie.html.twig', [
-//            'sortieForm' => $sortieForm->createView(),
-//        ]);
-//
-//    }
 
 
 }

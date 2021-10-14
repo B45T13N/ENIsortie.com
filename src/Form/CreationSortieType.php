@@ -3,13 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -20,7 +17,7 @@ class CreationSortieType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $ChoixEtat = ['Créée','Ouverte'];
+
         $builder
             ->add('nom')
             ->add('date', DateTimeType::class, [
@@ -29,6 +26,7 @@ class CreationSortieType extends AbstractType
             ])
             ->add('duree', IntegerType::class, [
                 'label' => 'Durée (En minutes)'
+
             ])
             ->add('dateLimite', DateType::class, [
                 'html5' => true,
@@ -43,7 +41,7 @@ class CreationSortieType extends AbstractType
 
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
-                'label' => 'Your campus',
+                'label' => 'Campus',
                 'choice_label' => 'nom',
                 'disabled' => true,
             ])

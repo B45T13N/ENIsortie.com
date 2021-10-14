@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {%for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
+    <h2> Participant : {{ app.user.prenom }}.{{  app.user.nom |slice(0,1) }}</h2>
+
+    <h3> Filter les sorties :</h3>
     <div>
         <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
         <h2> Participant : {{ app.user.prenom }}.{{  app.user.nom |slice(0,1) }}</h2>
