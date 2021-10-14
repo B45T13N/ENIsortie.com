@@ -29,21 +29,14 @@ class SortieRepository extends ServiceEntityRepository
         $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
         $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
         $queryBuilder->leftJoin('s.participant', 'su')->addSelect('su');
-        $er = $this->getEntityManager()->getRepository(Etat::class);
-        $etat = $er->findOneBy(['libelle' => 'Clôturée']);
+        $queryBuilder->where('e.libelle != \'Passée\'');
         $query = $queryBuilder -> getQuery();
 
         $sorties = $query->getResult();
-        foreach ($sorties as $sortie)
-        {
-            if($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))
-            {
-                $sortie->setEtat($etat);
-                $this->_em->persist($sortie);
-            }
-        }
-        $this->_em->flush();
-        return $sorties;
+
+        $this->archivage($sorties);
+
+        return $query->getResult();
     }
 
     public function filtreSortieAccueil($nom = null, $campus, $date1, $date2)
@@ -63,50 +56,46 @@ class SortieRepository extends ServiceEntityRepository
             ->setParameter('lastDate', $date2);
 
 
-        $er = $this->getEntityManager()->getRepository(Etat::class);
-        $etat = $er->findOneBy(['libelle' => 'Clôturée']);
         $query = $queryBuilder -> getQuery();
 
         $sorties = $query->getResult();
-        foreach ($sorties as $sortie)
-        {
-            if($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))
-            {
-                $sortie->setEtat($etat);
+        $this->archivage($sorties);
+
+        return $query->getResult();
+    }
+
+    public function archivage($sorties)
+    {
+
+        $er = $this->getEntityManager()->getRepository(Etat::class);
+        $etatCloture = $er->findOneBy(['libelle' => 'Clôturée']);
+        $etatPasse = $er->findOneBy(['libelle' => 'Passée']);
+        $etatOuvert = $er->findOneBy(['libelle' => 'Ouverte']);
+        $etatEnCours = $er->findOneBy(['libelle' => 'Activité en cours']);
+
+        foreach ($sorties as $sortie) {
+            if ($sortie->getEtat()->getLibelle() != 'Clôturée' && $sortie->getEtat()->getLibelle() != 'Annulée' && ($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                $sortie->setEtat($etatCloture);
+                $this->_em->persist($sortie);
+            }
+
+            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getDate() < new \DateTime()) {
+                $sortie->setEtat($etatPasse);
+                $this->_em->persist($sortie);
+            }
+
+            if ($sortie->getEtat()->getLibelle() != 'Ouverte' && $sortie->getEtat()->getLibelle() != 'Annulée' && ($sortie->getDate() > new \DateTime() && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                $sortie->setEtat($etatOuvert);
+                $this->_em->persist($sortie);
+            }
+
+            if ($sortie->getEtat()->getLibelle() != 'Activité en cours' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getEtat()->getLibelle() == 'Ouverte' && $sortie->getDate() < new \DateTime($sortie->getDuree(). 'minutes') && $sortie->getDate() > new \DateTime('+24 hours')) {
+                $sortie->setEtat($etatEnCours);
                 $this->_em->persist($sortie);
             }
         }
+
         $this->_em->flush();
-        return $sorties;
     }
-
-    // /**
-    //  * @return Sortie[] Returns an array of Sortie objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Sortie
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 
 }
