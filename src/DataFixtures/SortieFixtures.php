@@ -22,8 +22,8 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $sortie->setNom($faker->unique->word());
             $sortie->setDescription($faker->realText());
             $sortie->setCampus($this->getReference(Campus::class.'_'.mt_rand(1,5)));
-            $sortie->setDate($faker->dateTimeBetween('-1 months', 'now'));
-            $sortie->setDateLimite($faker->dateTimeBetween($sortie->getDate(), 'now'));
+            $sortie->setDate($faker->dateTimeBetween('-1 months', '+3 months'));
+            $sortie->setDateLimite($faker->dateTimeBetween($sortie->getDate(), '+3 months'));
             $sortie->setDuree($faker->randomNumber(3, false));
             $sortie->setEtat($this->getReference(Etat::class.'_'.mt_rand(1,6)));
             $sortie->setLieu($this->getReference(Lieu::class.'_'.mt_rand(1,10)));
