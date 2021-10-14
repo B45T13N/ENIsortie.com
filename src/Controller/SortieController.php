@@ -137,6 +137,21 @@ class SortieController extends AbstractController
 
     }
 
+    /**
+     * @Route("/RegisterSortie/{idSortie}", name="registrationSortie")
+     */
+    public function register(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager){
+
+
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($idSortie);
+        $sortie->addParticipant($user);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('sortie_liste');
+
+    }
 
 
 }
