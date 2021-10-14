@@ -72,10 +72,10 @@
                                     <a href="#">- Se désister</a>
                                     {% set break = true %}
                                 {% elseif loop.last and not break %}
-                                    <a href="#">- S'inscrire1</a>
+                                    <a href="{{ path('sortie_registrationSortie', {'idSortie': sortie.id}) }}">- S'inscrire1</a>
                                 {% endif %}
                             {% else %}
-                                <a href="#">- S'inscrire2</a>
+                                <a href="{{ path('sortie_registrationSortie', {'idSortie': sortie.id}) }}">- S'inscrire2</a>
                             {% endfor %}
                         {% endif %}
                     {% else %}
