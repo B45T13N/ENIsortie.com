@@ -5,9 +5,18 @@
 {% endblock %}
 
 {% block body %}
-    <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
-    {{ form_start(editProfileForm) }}
-    {{ form_widget(editProfileForm) }}
-    <button>Enregistrer</button>
-    {{ form_end(editProfileForm) }}
+    <div>
+        {% if app.user.photo %}
+            <img src="{{ asset('photo/' ~ app.user.photo) }}" alt="Photo de {{ app.user.username }}">
+        {% else %}
+            <img src="{{ asset('photo/user.png') }}" alt="Photo de {{ app.user.username }}">
+        {% endif %}
+    </div>
+    <div>
+        <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
+        {{ form_start(editProfileForm) }}
+        {{ form_widget(editProfileForm) }}
+        <button>Enregistrer</button>
+        {{ form_end(editProfileForm) }}
+    </div>
 {% endblock %}

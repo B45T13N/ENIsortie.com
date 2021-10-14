@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -45,6 +46,10 @@ class ProfileType extends AbstractType
                 'class'=>Campus::class,
                 'choice_label' => 'nom',
                 'disabled' => true
+            ])
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+                'required' => false,
             ])
         ;
     }

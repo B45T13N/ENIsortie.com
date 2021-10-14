@@ -8,6 +8,13 @@
 
    <h1>{{ user.username }}</h1>
     <div>
+        {% if user.photo %}
+        <img src="{{ asset('photo/' ~ user.photo) }}" alt="Photo de {{ user.username }}">
+        {% else %}
+            <img src="{{ asset('photo/user.png') }}" alt="Photo de {{ user.username }}">
+        {% endif %}
+    </div>
+    <div>
         <a>Prénom : {{ user.prenom }}</a>
     </div>
     <div>

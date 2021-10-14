@@ -109,6 +109,40 @@ class SortieController extends AbstractController
     }
 
     /**
+     * @Route("/ModifySortie/{idSortie}", name="modifSortie")
+     */
+    public function modify(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository,
+        SortieRepository $sortieRepository,
+        int $idSortie
+    ): Response
+    {
+        $sortie = $sortieRepository->find($idSortie);
+        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+
+        $sortieForm->handleRequest($request);
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            if($request->request->get('cree')){
+                $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+            } else {
+                $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+            }
+            $sortie->setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Sortie ajoutée avec succès');
+            return $this->redirectToRoute('sortie_liste');
+        }
+        return $this->render('sortie/creationSortie.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+        ]);
+
+    }
+
+    /**
      *
      * @Route("/cancelSortie/{idSortie}", name="cancelSortie")
      */

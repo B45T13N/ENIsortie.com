@@ -22,6 +22,7 @@ class UserController extends AbstractController
     public function editProfile(UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
         $user = $this->getUser();
+        $directory = '\wamp64\www\ENIsortie.com\public\photo';
 
         if($userRepository->find($user)){
 
@@ -35,6 +36,9 @@ class UserController extends AbstractController
                         $editProfileForm->get('plainPassword')->getData()
                     )
                 );
+                $file = $editProfileForm['photo']->getData();
+                $file->move($directory, $file->getClientOriginalName());
+                $user->setPhoto($file->getClientOriginalName());
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
