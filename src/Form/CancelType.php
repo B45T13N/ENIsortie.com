@@ -15,8 +15,10 @@ class CancelType extends AbstractType
     {
         $builder
 
-            ->add('description', TextType::class, ['label' => 'motif'])
-
+            ->add('description', TextType::class, [
+                'label' => 'Motif :',
+                'mapped' => false
+            ])
         ;
     }
 
