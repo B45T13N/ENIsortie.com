@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Form\CancelType;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
 use App\Form\LieuType;
@@ -14,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/", name="sortie_")
@@ -150,6 +152,36 @@ class SortieController extends AbstractController
 //        ]);
 //
 //    }
+
+    /**
+     *
+     * @Route("/cancelSortie/{idSortie}", name="cancelSortie")
+     */
+    public function cancel(Request $request, EntityManagerInterface $entityManager, EtatRepository $etatRepository, SortieRepository $sortieRepository, int $idSortie)
+    {
+
+        $sortie = $sortieRepository->find($idSortie);
+        $etat = $etatRepository->findOneBy(['libelle'=>'Annulée']);
+
+        $cancelForm = $this->createForm(CancelType::class, $sortie);
+
+        $cancelForm->handleRequest($request);
+
+
+        if($cancelForm->isSubmitted() && $cancelForm->isValid()){
+
+            $sortie -> setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('Success', 'Votre sortie a été annulée avec succès');
+            return $this->redirectToRoute('sortie_liste');
+        }
+        return $this->render('sortie/cancelSortie.html.twig', [
+            'cancelForm' => $cancelForm->createView(),
+        ]);
+
+    }
+
 
 
 }
