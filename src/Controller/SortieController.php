@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
 use App\Entity\Sortie;
-use App\Entity\User;
+use App\Form\CancelType;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
 use App\Repository\EtatRepository;
@@ -74,24 +73,28 @@ class SortieController extends AbstractController
     public function create(
         Request                $request,
         EntityManagerInterface $entityManager,
-        EtatRepository $etatRepository,
-        SortieRepository $sortieRepository
-
+        EtatRepository $etatRepository
     ): Response
     {
-        $currentUser = $this->getUser();
-
-
+            $currentUser = $this->getUser();
             $sortie = new Sortie();
-
             $sortie->setOrganisateur($currentUser);
             $sortie->setCampus($currentUser->getCampus());
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+            if($sortie->getDateLimite()>$sortie->getDate()){
+                $this->addFlash('error',
+                 'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
+                );
+            }
 
             $sortieForm->handleRequest($request);
-
+            $etat = $etatRepository;
             if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-                $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                if($request->request->get('cree')){
+                    $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
+                } else {
+                    $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+                }
                 $sortie->setEtat($etat);
                 $entityManager->persist($sortie);
                 $entityManager->flush();
@@ -106,54 +109,34 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/RegisterSortie/{idSortie}", name="registrationSortie")
+     *
+     * @Route("/cancelSortie/{idSortie}", name="cancelSortie")
      */
-    public function register(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager){
+    public function cancel(Request $request, EntityManagerInterface $entityManager, EtatRepository $etatRepository, SortieRepository $sortieRepository, int $idSortie)
+    {
 
-
-        $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
-        $sortie->addParticipant($user);
-        $entityManager->persist($sortie);
-        $entityManager->flush();
+        $etat = $etatRepository->findOneBy(['libelle'=>'Annulée']);
 
-        return $this->redirectToRoute('sortie_liste');
+        $cancelForm = $this->createForm(CancelType::class, $sortie);
+
+        $cancelForm->handleRequest($request);
+
+
+        if($cancelForm->isSubmitted() && $cancelForm->isValid()){
+
+            $sortie -> setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            $this->addFlash('Success', 'Votre sortie a été annulée avec succès');
+            return $this->redirectToRoute('sortie_liste');
+        }
+        return $this->render('sortie/cancelSortie.html.twig', [
+            'cancelForm' => $cancelForm->createView(),
+        ]);
 
     }
 
-//   /**
-//     *
-//     * @Route("/Sortie/{id}", name="SortiePublish")
-//     */
-//
-//    public function publish(
-//        Request                $request,
-//        EntityManagerInterface $entityManager,
-//        EtatRepository $etatRepository,
-//        SortieRepository $sortieRepository,
-//        int $id=0) {
-//
-//
-//        $sortie = $sortieRepository->find($id);
-//        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-//
-//        $sortieForm->handleRequest($request);
-//
-//        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-//            $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
-//            $sortie->setEtat($etat);
-//            $entityManager->persist($sortie);
-//            $entityManager->flush();
-//
-//            $this->addFlash('success', 'Sortie ajoutée avec succès');
-//            return $this->redirectToRoute('sortie_liste');
-//
-//        }
-//        return $this->render('sortie/creationSortie.html.twig', [
-//            'sortieForm' => $sortieForm->createView(),
-//        ]);
-//
-//    }
 
 
 }
