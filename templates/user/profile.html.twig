@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Profil de {{ user.prenom }} {{ user.nom }}
+{% endblock %}
+
+{% block body %}
+
+   <h1>{{ user.username }}</h1>
+    <div>
+        <a>Prénom : {{ user.prenom }}</a>
+    </div>
+    <div>
+        <a>Nom : {{ user.nom }}</a>
+    </div>
+    <div>
+        <a> Téléphone : {{ user.telephone }}</a>
+    </div>
+    <div>
+        <a>Email : {{ user.email }}</a>
+    </div>
+    <div>
+        <a>Campus : {{ user.campus.nom}}</a>
+    </div>
+    <a type="button" {{ path('sortie_liste') }}>Retour</a>
+{% endblock %}
+

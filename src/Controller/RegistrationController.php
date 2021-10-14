@@ -18,6 +18,9 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface): Response
     {
         $user = new User();
+        $user->setRoles(["ROLE_USER"]);
+        $user->setAdmin(0);
+        $user->setActif(0);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -35,7 +38,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('_profiler_home');
+            return $this->redirectToRoute('sortie_liste');
         }
 
         return $this->render('registration/register.html.twig', [
