@@ -160,6 +160,10 @@ class SortieController extends AbstractController
         if($cancelForm->isSubmitted() && $cancelForm->isValid()){
 
             $sortie -> setEtat($etat);
+
+            $newDescription = $cancelForm['description'] -> getData();
+            $sortie->setDescription((string)$newDescription);
+
             $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash('Success', 'Votre sortie a été annulée avec succès');
@@ -167,8 +171,8 @@ class SortieController extends AbstractController
         }
         return $this->render('sortie/cancelSortie.html.twig', [
             'cancelForm' => $cancelForm->createView(),
+            'sortie' => $sortie,
         ]);
-
     }
 
     /**
@@ -186,7 +190,6 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_liste');
 
     }
-
 
 }
 
