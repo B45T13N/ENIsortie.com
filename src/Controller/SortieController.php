@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
+use App\Form\LieuType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/", name="sortie_")
@@ -80,11 +81,19 @@ class SortieController extends AbstractController
             $sortie->setOrganisateur($currentUser);
             $sortie->setCampus($currentUser->getCampus());
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+
+
+            //Test message erreur
             if($sortie->getDateLimite()>$sortie->getDate()){
                 $this->addFlash('error',
                  'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
                 );
             }
+
+            //--------------------------------------------
+
+
+
 
             $sortieForm->handleRequest($request);
             $etat = $etatRepository;
@@ -106,6 +115,41 @@ class SortieController extends AbstractController
             ]);
 
     }
+
+    /**
+     * @Route("/affichageSortie/{id}", name="affichageSortie")
+     */
+    public function affichageSortie(SortieRepository $sortieRepository, Request $request, int $id): Response
+    {
+
+        $sortieDetails = $sortieRepository->affichageSortieDetails($id);
+        $listeParticipants = $sortieDetails[0]->getParticipant();
+        return $this->render('sortie/affichageSortie.html.twig',
+                ["sortieDetails" => $sortieDetails[0],
+                "listeParticipants" => $listeParticipants
+            ]);
+
+
+
+    }
+
+
+
+//    /**
+//     * @Route("/CreateLieu/", name="creationLieu")
+//     */
+//    public function createLieu(
+//        Request                $request,
+//        EntityManagerInterface $entityManager
+//    ): Response
+//    {
+//        $lieu = new Lieu();
+//        $lieuForm = $this->createForm(LieuType::class, $lieu);
+//        return $this->render('sortie/createLieu.html.twig', [
+//            'lieuForm' => $lieuForm->createView(),
+//        ]);
+//
+//    }
 
 
 }

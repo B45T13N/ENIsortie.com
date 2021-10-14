@@ -29,6 +29,9 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
             $sortie->setLieu($this->getReference(Lieu::class.'_'.mt_rand(1,10)));
             $sortie->setNombreInscriptionsMax($faker->randomNumber(2, false));
             $sortie->setOrganisateur($this->getReference(User::class.'_'.mt_rand(1,10)));
+            for($j=0; $j<$sortie->getNombreInscriptionsMax(); $j++ ){
+                $sortie->addParticipant($this->getReference(User::class.'_'.mt_rand(1,10)));
+            }
             $manager->persist($sortie);
             $this->addReference(Sortie::class.'_'.$i, $sortie);
         }

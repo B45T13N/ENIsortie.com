@@ -79,6 +79,31 @@ class SortieRepository extends ServiceEntityRepository
         $this->_em->flush();
         return $sorties;
     }
+    public function affichageSortieDetails(int $id)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
+        $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
+        $queryBuilder->where('s.id = '. $id );
+        $query = $queryBuilder -> getQuery();
+
+        $sortie = $query->getResult();
+        return $sortie;
+    }
+
+
+
+
+    public function affichageListeParticipants(int $id)
+    {
+        $queryBuilder = $this->createQueryBuilder('s');
+        $queryBuilder->leftJoin('s.participant', 'su')->addSelect('su');
+        $queryBuilder->where('s.id = '. $id);
+        $query = $queryBuilder -> getQuery();
+        $listeParticipants = $query->getResult();
+        return $listeParticipants;
+    }
+
 
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects

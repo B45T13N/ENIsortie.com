@@ -86,7 +86,7 @@
                         {% if sortie.etat.libelle is same as("Créée") and app.user.id is same as(sortie.organisateur.id) %}
                             <a href="#">Publier</a>
                         {% endif %}
-                        <a href="#" >Afficher</a>
+                        <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                     {% endif %}
                 {% endif %}
             </td>
