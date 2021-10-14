@@ -61,8 +61,8 @@
                 </td>
                 <td>
                     {% if app.user.id != sortie.organisateur.id%}
-                        {% if sortie.etat.libelle is same as("Clôturée") and sortie.etat.libelle is same as("Activité en cours") and sortie.etat.libelle is same as("Passée") %}
-                            <a href="#" >Afficher</a>
+                        {% if sortie.etat.libelle != 'Annulée'%}
+                            <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                         {% endif %}
                         {% if sortie.etat.libelle is same as("Ouverte") %}
                             {% set break = false %}
@@ -79,6 +79,7 @@
                             {% endfor %}
                         {% endif %}
                     {% else %}
+                        <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                         {#                            Condition pour l'affichage des boutons d'organisateurs #}
                         {% if app.user.id == sortie.organisateur.id and sortie.dateLimite > date('now') or sortie.etat.libelle is same as("Ouverte") or sortie.etat.libelle is same as("Créée") %}
                             <a href="{{ path('sortie_cancelSortie', { 'idSortie':sortie.id })}}">Annuler</a>
@@ -87,7 +88,7 @@
                         {% if sortie.etat.libelle is same as("Créée") and app.user.id is same as(sortie.organisateur.id) %}
                             <a href="#">Publier</a>
                         {% endif %}
-                        <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
+
                     {% endif %}
                 {% endif %}
             </td>

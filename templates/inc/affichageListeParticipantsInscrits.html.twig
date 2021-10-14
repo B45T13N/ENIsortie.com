@@ -1,3 +1,5 @@
+
+<h3>Liste des participants inscrits :</h3>
 <table>
     <thead>
         <tr>
@@ -6,18 +8,16 @@
         </tr>
     </thead>
     <tbody>
+        {% for participant in listeParticipants %}
         <tr>
-            {% for participant in listeParticipants %}
+            <td>
                 {{ participant.username }}
-            {% endfor %}
-
-                <td>
-
-                </td>
-                <td>
-
-                </td>
+            </td>
+            <td>
+                {{ participant.prenom }}  {{ participant.nom|upper }}
+            </td>
 
         </tr>
+        {% endfor %}
     </tbody>
 </table>

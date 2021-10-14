@@ -1,3 +1,6 @@
+{% extends 'base.html.twig' %}
+
+
 {% block body %}
 
     <h2>Afficher une sortie</h2>
@@ -8,7 +11,7 @@
     <p>Date et heure de la sortie : {{ sortieDetails.date|date('m/d/Y') }}</p>
     <p>Date limite d'inscription : {{ sortieDetails.dateLimite|date('m/d/Y') }}</p>
     <p>Nombre de places : {{ sortieDetails.nombreInscriptionsMax }}</p>
-    <p>Durée : {{ sortieDetails.duree }}</p>
+    <p>Durée : {{ sortieDetails.duree }} minutes</p>
     <p>Description et infos : {{ sortieDetails.description }}</p>
     <p>Campus : {{ sortieDetails.campus.nom }}</p>
     <p>Lieu : {{ sortieDetails.lieu.nom }}</p>
