@@ -82,7 +82,6 @@ class User implements UserInterface
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="estRattache")
      * @ORM\JoinColumn(nullable=false)
-     * @Assert\Choice(choices={"1", "2", "3", "4"})
      */
     private $campus;
 
