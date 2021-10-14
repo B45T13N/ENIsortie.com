@@ -1,26 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Profil de {{ app.user.prenom }} {{ app.user.nom }}
+    Profil de {{ user.prenom }} {{ user.nom }}
 {% endblock %}
 
 {% block body %}
 
-   <h1>{{ app.user.username }}</h1>
+   <h1>{{ user.username }}</h1>
     <div>
-        <a>Prénom : {{ app.user.prenom }}</a>
+        <a>Prénom : {{ user.prenom }}</a>
     </div>
     <div>
-        <a>Nom : {{ app.user.nom }}</a>
+        <a>Nom : {{ user.nom }}</a>
     </div>
     <div>
-        <a> Téléphone : {{ app.user.telephone }}</a>
+        <a> Téléphone : {{ user.telephone }}</a>
     </div>
     <div>
-        <a>Email : {{ app.user.email }}</a>
+        <a>Email : {{ user.email }}</a>
     </div>
     <div>
-        <a>Campus : {{ app.user.campus.nom}}</a>
+        <a>Campus : {{ user.campus.nom}}</a>
     </div>
     <a type="button" {{ path('sortie_liste') }}>Retour</a>
 {% endblock %}
