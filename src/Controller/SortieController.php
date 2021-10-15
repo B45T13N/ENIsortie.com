@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @Route("/", name="sortie_")
@@ -56,6 +55,7 @@ class SortieController extends AbstractController
             return $this->render('main/home.html.twig', [
                 'sorties' => $sorties,
                 'filtreForm' => $filtreForm->createView(),
+                ''
             ]);
         }
 
@@ -161,7 +161,36 @@ class SortieController extends AbstractController
     }
 
 
+    /**
+     * @Route("/publierSortie/{idSortie}", name="publierSortie")
+     */
+    public function publierSortie(
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository,
+        SortieRepository $sortieRepository,
+        int $idSortie
+    ): Response
+    {
+        $sortie = $sortieRepository->find($idSortie);
+        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
 
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
+            $sortie->setEtat($etat);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Sortie publiée avec succès');
+            return $this->redirectToRoute('sortie_liste');
+        }
+        return $this->render('sortie/publierSortie.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+        ]);
+
+    }
 //    /**
 //     * @Route("/CreateLieu/", name="creationLieu")
 //     */
