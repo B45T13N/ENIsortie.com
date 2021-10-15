@@ -77,7 +77,8 @@ class SortieRepository extends ServiceEntityRepository
 
         foreach ($sorties as $sortie) {
 
-//            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getEtat()->getLibelle() != 'Clôturée')
+//            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' &&
+//              $sortie->getEtat()->getLibelle() != 'Clôturée')
 //            {
 //                $sortie->setEtat($etatPasse);
 //                $this->_em->persist($sortie);

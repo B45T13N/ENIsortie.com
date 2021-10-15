@@ -1,16 +1,19 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-    <div>
-        {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
-        <button name="publier" value="publier">Publier une sortie</button>
-        <button><a href="{{ path('sortie_liste') }}">Retour</a></button>
-        {{ form_end(sortieForm) }}
-    </div>
-
+    <main>
+        <div>
+            {{ form_start(sortieForm) }}
+            {{ form_widget(sortieForm) }}
+            <button name="publier" value="publier">Publier une sortie</button>
+            <button><a href="{{ path('sortie_liste') }}">Retour</a></button>
+            {{ form_end(sortieForm) }}
+        </div>
+    </main>
 
 {% endblock %}
+
+
 {% block title %}
     {{ parent() }} | Publier une sortie
 {% endblock %}

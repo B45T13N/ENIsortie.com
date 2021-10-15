@@ -1,25 +1,26 @@
 {% extends 'base.html.twig' %}
 
 
-
+{% block title %} {{ parent() }} | Créer sortie {% endblock %}
 
 {% block body %}
 
-
-    {%for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="flash flash-{{ label }}">
-                {{ message }}
-            </div>
+    <main>
+        {%for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
 
-<div>
-       {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
-        <button name="cree" value="cree">Créer une sortie</button>
-        <button name="publier" value="publier">Publier une sortie</button>
-        {{ form_end(sortieForm) }}
-</div>
+        <div>
+            {{ form_start(sortieForm) }}
+            {{ form_widget(sortieForm) }}
+            <button name="cree" value="cree">Créer une sortie</button>
+            <button name="publier" value="publier">Publier une sortie</button>
+            {{ form_end(sortieForm) }}
+        </div>
+    </main>
 
 {% endblock %}
