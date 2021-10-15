@@ -1,3 +1,7 @@
+
+{% set class = "" %}
+{% set break = false %}
+
 <table>
     <thead>
     <tr>
@@ -31,9 +35,29 @@
     <tbody>
 
     {% for sortie in sorties%}
-        {% if app.user.id is same as(sortie.organisateur.id) and sortie.etat.libelle is same as("Créée") or sortie.etat.libelle is same as("Activité en cours") or sortie.etat.libelle is same as("Ouverte")
-            or (app.user.id != sortie.organisateur.id and sortie.etat.libelle != "Créée") %}
-            <tr>
+        {% if app.user.id is same as(sortie.organisateur.id) or (app.user.id != sortie.organisateur.id and (sortie.etat.libelle != ("Créée"))) %}
+
+            {% if app.user.id is same as(sortie.organisateur.id) %}
+                {% set class = "orga"%}
+            {% else %}
+                {% for participant in sortie.participant %}
+                    {% if app.user.id is same as(participant.id) and not break %}
+                        {% set class = class ~ " inscrit"%}
+                        {% set break = true %}
+                    {% elseif loop.last and not break%}
+                        {% set class = class ~ " pas inscrit"%}
+                    {% endif %}
+                {% endfor %}
+                {% set break = false %}
+            {% endif %}
+            {% if sortie.etat.libelle == 'Passée' %}
+                {% set class = class ~ " passe" %}
+            {% endif %}
+
+            <tr class="{{ class }}">
+
+            {% set class = "" %}
+
                 <td>
                     {{ sortie.nom }}
                 </td>
@@ -69,9 +93,9 @@
                             {#  Condition pour affichage de s'inscrire ou se désister                              #}
                             {% for participant in sortie.participant %}
                                 {% if app.user.id is same as(participant.id) %}
-                                    <a href="#">- Se désister</a>
+                                    <a href="{{ path('sortie_seDesisterSortie', {'idSortie' : sortie.id}) }}">- Se désister</a>
                                     {% set break = true %}
-                                {% elseif loop.last and not break %}
+                                {% elseif loop.last and not break and sortie.participant|length < sortie.nombreInscriptionsMax %}
                                     <a href="{{ path('sortie_registrationSortie', {'idSortie': sortie.id}) }}">- S'inscrire1</a>
                                 {% endif %}
                             {% else %}
@@ -81,7 +105,7 @@
                     {% else %}
                         <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                         {#                            Condition pour l'affichage des boutons d'organisateurs #}
-                        {% if app.user.id == sortie.organisateur.id and sortie.dateLimite > date('now') or sortie.etat.libelle is same as("Ouverte") or sortie.etat.libelle is same as("Créée") %}
+                        {% if app.user.id == sortie.organisateur.id and sortie.date > date('now') or sortie.etat.libelle != ("Passée") %}
                             <a href="{{ path('sortie_cancelSortie', { 'idSortie':sortie.id })}}">Annuler</a>
                             <a href="{{ path('sortie_modifSortie', {'idSortie' : sortie.id }) }}">Modifier</a>
                         {% endif %}

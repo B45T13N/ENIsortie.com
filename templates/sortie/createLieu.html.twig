@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
-{% block body %}
-<div>
-    {{ form_start(sortieForm) }}
-    {{ form_widget(sortieForm) }}
-    <button name="cree" value="cree">Créer une sortie</button>
-    <button name="publier" value="publier">Publier une sortie</button>
-    {{ form_end(sortieForm) }}
-</div>
 
+{% block title %} {{ parent() }} | Créer lieu {% endblock %}
+
+{% block body %}
+    <main>
+        <div>
+            {{ form_start(sortieForm) }}
+            {{ form_widget(sortieForm) }}
+            <button name="cree" value="cree">Créer une sortie</button>
+            <button name="publier" value="publier">Publier une sortie</button>
+            {{ form_end(sortieForm) }}
+        </div>
+    </main>
 {% endblock %}
