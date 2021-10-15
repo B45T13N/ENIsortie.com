@@ -39,7 +39,6 @@ class SortieController extends AbstractController
         $filtreForm = $this->createForm(FilterType::class, $sortie);
         $sorties = $sortieRepository->affichageSortieAccueil();
 
-
         $filtreForm->handleRequest($request);
 
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
@@ -55,7 +54,6 @@ class SortieController extends AbstractController
             return $this->render('main/home.html.twig', [
                 'sorties' => $sorties,
                 'filtreForm' => $filtreForm->createView(),
-                ''
             ]);
         }
 
@@ -248,9 +246,13 @@ class SortieController extends AbstractController
 
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
-        $sortie->addParticipant($user);
-        $entityManager->persist($sortie);
-        $entityManager->flush();
+        if(new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
+            $this->addFlash("Error", "T'es trop lent, la sortie n'est plus dispo !");
+        } else{
+            $sortie->addParticipant($user);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+        }
 
         return $this->redirectToRoute('sortie_liste');
 
@@ -264,10 +266,14 @@ class SortieController extends AbstractController
 
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
-        $sortie->removeParticipant($user);
-        $entityManager->persist($sortie);
-        $entityManager->flush();
 
+        if($sortie->getDate() < new \DateTime()) {
+            $this->addFlash("Error", "Tu ne peux plus de désinscrire petit coquin !");
+        }else{
+            $sortie->removeParticipant($user);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+        }
         return $this->redirectToRoute('sortie_liste');
 
     }
