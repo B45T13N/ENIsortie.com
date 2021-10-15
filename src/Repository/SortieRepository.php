@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Etat;
 use App\Entity\Sortie;
+use DateInterval;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -29,7 +30,7 @@ class SortieRepository extends ServiceEntityRepository
         $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
         $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
         $queryBuilder->leftJoin('s.participant', 'su')->addSelect('su');
-        $queryBuilder->where('e.libelle != \'Passée\'');
+        $queryBuilder->where('e.libelle != \'Archivée\'');
         $query = $queryBuilder->getQuery();
 
         $sorties = $query->getResult();
@@ -72,29 +73,41 @@ class SortieRepository extends ServiceEntityRepository
         $etatPasse = $er->findOneBy(['libelle' => 'Passée']);
         $etatOuvert = $er->findOneBy(['libelle' => 'Ouverte']);
         $etatEnCours = $er->findOneBy(['libelle' => 'Activité en cours']);
+        $etatArchivee = $er->findOneBy(['libelle' => 'Archivée']);
 
         foreach ($sorties as $sortie) {
-            if ($sortie->getEtat()->getLibelle() != 'Clôturée' && $sortie->getEtat()->getLibelle() != 'Annulée' && ($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+
+//            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getEtat()->getLibelle() != 'Clôturée')
+//            {
+//                $sortie->setEtat($etatPasse);
+//                $this->_em->persist($sortie);
+//            }
+
+            if ($sortie->getEtat()->getLibelle() != 'Clôturée' && $sortie->getEtat()->getLibelle() != 'Annulée'
+                && ($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
                 $sortie->setEtat($etatCloture);
                 $this->_em->persist($sortie);
             }
 
-            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getDate() < new \DateTime()) {
-                $sortie->setEtat($etatPasse);
-                $this->_em->persist($sortie);
-            }
-
-            if ($sortie->getEtat()->getLibelle() != 'Ouverte' && $sortie->getEtat()->getLibelle() != 'Annulée' && ($sortie->getDate() > new \DateTime() && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+            if ($sortie->getEtat()->getLibelle() != 'Ouverte' && $sortie->getEtat()->getLibelle() != 'Annulée'
+                && ($sortie->getDate() > new \DateTime() && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant())))
+            {
                 $sortie->setEtat($etatOuvert);
                 $this->_em->persist($sortie);
             }
 
-            if ($sortie->getEtat()->getLibelle() != 'Activité en cours' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getEtat()->getLibelle() == 'Ouverte' && $sortie->getDate() < new \DateTime($sortie->getDuree() . 'minutes') && $sortie->getDate() > new \DateTime('+24 hours')) {
+            if ($sortie->getEtat()->getLibelle() == 'Ouverte' && (new \DateTime() > $sortie->getDate() &&
+                $sortie->getDate() < new \DateTime($sortie->getDuree() . 'minutes')))
+            {
                 $sortie->setEtat($etatEnCours);
                 $this->_em->persist($sortie);
             }
-        }
 
+            if ($sortie->getDate() < new \DateTime('-1 month')) {
+                $sortie->setEtat($etatArchivee);
+                $this->_em->persist($sortie);
+            }
+        }
         $this->_em->flush();
         return $sorties;
     }
@@ -112,21 +125,5 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 }
-    // /**
-    //  * @return Sortie[] Returns an array of Sortie objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 
 
-}

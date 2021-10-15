@@ -123,6 +123,7 @@ class SortieController extends AbstractController
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
 
         $sortieForm->handleRequest($request);
+
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if($request->request->get('cree')){
                 $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
@@ -219,6 +220,22 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
         $sortie->addParticipant($user);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('sortie_liste');
+
+    }
+
+    /**
+     * @Route("/seDesister/{idSortie}", name="seDesisterSortie")
+     */
+    public function seDesister(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager){
+
+
+        $user = $this->getUser();
+        $sortie = $sortieRepository->find($idSortie);
+        $sortie->removeParticipant($user);
         $entityManager->persist($sortie);
         $entityManager->flush();
 
