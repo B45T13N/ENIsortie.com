@@ -22,10 +22,14 @@
     <title>{% block title %}Eni Sortie {% endblock %}</title>
 </head>
 
-
 <body>
         <header>
-            {% include 'inc/nav.html.twig'%}
+            <div class="logoEni">
+                <p></p>
+            </div>
+            <div class="navBarre">
+                {% include 'inc/nav.html.twig'%}
+            </div>
         </header>
 
         {%for label, messages in app.flashes %}

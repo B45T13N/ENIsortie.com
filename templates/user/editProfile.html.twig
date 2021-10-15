@@ -7,9 +7,9 @@
 {% block body %}
     <div>
         {% if app.user.photo %}
-            <img src="{{ asset('photo/' ~ app.user.photo) }}" alt="Photo de {{ app.user.username }}">
+            <img class="avatar" src="{{ asset('photo/' ~ app.user.photo) }}" alt="Photo de {{ app.user.username }}">
         {% else %}
-            <img src="{{ asset('photo/user.png') }}" alt="Photo de {{ app.user.username }}">
+            <img class="avatar" src="{{ asset('photo/user.png') }}" alt="Photo de {{ app.user.username }}">
         {% endif %}
     </div>
     <div>
