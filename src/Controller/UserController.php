@@ -63,4 +63,26 @@ class UserController extends AbstractController
         $user = $userRepository->find($id);
         return $this->render('user/profile.html.twig', ["user" => $user]);
     }
+    /**
+     * @Route("/desactiver/{id}", name="desactiver")
+     */
+    public function deactivateUser(int $id, UserRepository $userRepository){
+        $user = $userRepository->find($id);
+        $user->setActif(false);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('sortie_liste');
+    }
+    /*
+     * @Route("/delete/{id}", name="delete")
+    public function deleteUser(int $id, UserRepository $userRepository)
+    {
+        $user = $userRepository->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->flush();
+        return $this->redirectToRoute('sortie_liste');
+    }
+*/
 }
