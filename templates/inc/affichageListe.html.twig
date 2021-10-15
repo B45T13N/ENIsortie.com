@@ -1,3 +1,7 @@
+
+{% set class = "" %}
+{% set break = false %}
+
 <table>
     <thead>
     <tr>
@@ -32,7 +36,28 @@
 
     {% for sortie in sorties%}
         {% if app.user.id is same as(sortie.organisateur.id) or (app.user.id != sortie.organisateur.id and (sortie.etat.libelle != ("Créée"))) %}
-            <tr>
+
+            {% if app.user.id is same as(sortie.organisateur.id) %}
+                {% set class = "orga"%}
+            {% else %}
+                {% for participant in sortie.participant %}
+                    {% if app.user.id is same as(participant.id) and not break %}
+                        {% set class = class ~ " inscrit"%}
+                        {% set break = true %}
+                    {% elseif loop.last and not break%}
+                        {% set class = class ~ " pas inscrit"%}
+                    {% endif %}
+                {% endfor %}
+                {% set break = false %}
+            {% endif %}
+            {% if sortie.etat.libelle == 'Passée' %}
+                {% set class = class ~ " passe" %}
+            {% endif %}
+
+            <tr class="{{ class }}">
+
+            {% set class = "" %}
+
                 <td>
                     {{ sortie.nom }}
                 </td>

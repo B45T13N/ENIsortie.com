@@ -1,27 +1,27 @@
 {% extends 'base.html.twig' %}
 
-
-
+{% block title %} {{ parent() }} | Annuler une sortie {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <h3>Annuler sortie</h3>
-        <div>
-            <tr>
-                <td>Nom de la sortie : {{ sortie.nom }}</td><br/>
-                <td>Date de la sortie : {{ sortie.date|date("d-m-Y") }}</td><br/>
-                <td>Campus : {{ sortie.campus.nom }}</td><br/>
-                <td>Lieu : {{ sortie.lieu.nom }}</td><br/>
-            </tr><br/>
+    <main>
+        <div class="container">
+            <h3>Annuler sortie</h3>
+            <div>
+                <tr>
+                    <td>Nom de la sortie : {{ sortie.nom }}</td><br/>
+                    <td>Date de la sortie : {{ sortie.date|date("d-m-Y") }}</td><br/>
+                    <td>Campus : {{ sortie.campus.nom }}</td><br/>
+                    <td>Lieu : {{ sortie.lieu.nom }}</td><br/>
+                </tr><br/>
 
+            </div>
         </div>
-    </div>
-    <div>
-        {{ form_start(cancelForm) }}
-        {{ form_widget(cancelForm) }}
-        <a href="{{ path('sortie_liste') }}">Annuler</a>
-        <button name="enregistrer" value="annuler">Effacer sortie</button>
-        {{ form_end(cancelForm) }}
-    </div>
-
+        <div>
+            {{ form_start(cancelForm) }}
+            {{ form_widget(cancelForm) }}
+            <a href="{{ path('sortie_liste') }}">Annuler</a>
+            <button name="enregistrer" value="annuler">Effacer sortie</button>
+            {{ form_end(cancelForm) }}
+        </div>
+    </main>
 {% endblock %}
