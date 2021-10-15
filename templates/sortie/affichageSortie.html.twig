@@ -5,8 +5,6 @@
 
     <h2>Afficher une sortie</h2>
 
-
-
     <p>Nom de la sortie : {{ sortieDetails.nom }}</p>
     <p>Date et heure de la sortie : {{ sortieDetails.date|date('m/d/Y') }}</p>
     <p>Date limite d'inscription : {{ sortieDetails.dateLimite|date('m/d/Y') }}</p>
@@ -23,6 +21,8 @@
 
 {% include 'inc/affichageListeParticipantsInscrits.html.twig' %}
 
+{% endblock %}
 
-
+{% block title %}
+    {{ parent() }} | affichage d'une sortie
 {% endblock %}

@@ -22,7 +22,7 @@ class UserController extends AbstractController
     public function editProfile(UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
         $user = $this->getUser();
-        $directory = '\wamp64\www\ENIsortie.com\public\photo';
+        $directory = $this->getParameter('directory');
 
         if($userRepository->find($user)){
 

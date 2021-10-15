@@ -86,7 +86,7 @@
                             <a href="{{ path('sortie_modifSortie', {'idSortie' : sortie.id }) }}">Modifier</a>
                         {% endif %}
                         {% if sortie.etat.libelle is same as("Créée") and app.user.id is same as(sortie.organisateur.id) %}
-                            <a href="#">Publier</a>
+                             <a href="{{ path('sortie_publierSortie', {'idSortie' : sortie.id })  }}">Publier</a>
                         {% endif %}
 
                     {% endif %}
