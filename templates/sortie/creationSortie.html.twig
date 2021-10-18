@@ -6,6 +6,7 @@
 {% block body %}
 
     <main>
+        <h1 id="titreCréerSortie">Créer une sortie</h1>
         {%for label, messages in app.flashes %}
             {% for message in messages %}
                 <div class="flash flash-{{ label }}">
@@ -15,11 +16,15 @@
         {% endfor %}
 
         <div>
-            {{ form_start(sortieForm) }}
+            {{ form_start(sortieForm, {'attr':{'class':"formulaireCreationSortie"}}) }}
+            <button><a href="{{ path('sortie_ajouterLieu')}}">+</a></button>
             {{ form_widget(sortieForm) }}
-            <button name="cree" value="cree">Créer une sortie</button>
-            <button name="publier" value="publier">Publier une sortie</button>
-            {{ form_end(sortieForm) }}
+            {{ form_errors(sortieForm) }}
+            <div class="btnSortie">
+                <button name="cree" value="cree" class="btnSortieCreer">Créer une sortie</button>
+                <button name="publier" value="publier"class="btnSortiePublier">Publier une sortie</button>
+            </div>
+                {{ form_end(sortieForm) }}
         </div>
     </main>
 

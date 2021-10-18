@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\CancelType;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
+use App\Form\LieuType;
+use App\Form\VilleType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -78,12 +82,18 @@ class SortieController extends AbstractController
             $sortie = new Sortie();
             $sortie->setOrganisateur($currentUser);
             $sortie->setCampus($currentUser->getCampus());
+
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-            if($sortie->getDateLimite()>$sortie->getDate()){
-                $this->addFlash('error',
-                 'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
-                );
-            }
+            $lieu = new Lieu();
+            $lieuForm = $this->createForm(LieuType::class, $lieu);
+            $lieuForm->handleRequest($request);
+            if($lieuForm->isSubmitted() && $lieuForm->isValid()){
+
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+            $this->addFlash('Success', 'Votre lieu a été ajoutée avec succès');
+
+        }
 
             $sortieForm->handleRequest($request);
             $etat = $etatRepository;
@@ -101,6 +111,7 @@ class SortieController extends AbstractController
                 return $this->redirectToRoute('sortie_liste');
             }
             return $this->render('sortie/creationSortie.html.twig', [
+                'lieuForm'=> $lieuForm->createView(),
                 'sortieForm' => $sortieForm->createView(),
             ]);
 
@@ -189,21 +200,7 @@ class SortieController extends AbstractController
         ]);
 
     }
-//    /**
-//     * @Route("/CreateLieu/", name="creationLieu")
-//     */
-//    public function createLieu(
-//        Request                $request,
-//        EntityManagerInterface $entityManager
-//    ): Response
-//    {
-//        $lieu = new Lieu();
-//        $lieuForm = $this->createForm(LieuType::class, $lieu);
-//        return $this->render('sortie/createLieu.html.twig', [
-//            'lieuForm' => $lieuForm->createView(),
-//        ]);
-//
-//    }
+
 
     /**
      *
@@ -248,7 +245,9 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($idSortie);
         if(new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
             $this->addFlash("Error", "T'es trop lent, la sortie n'est plus dispo !");
-        } else{
+        } elseif($user->getCampus() != $sortie->getCampus()){
+            $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
+        }else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
             $entityManager->flush();
@@ -275,6 +274,55 @@ class SortieController extends AbstractController
             $entityManager->flush();
         }
         return $this->redirectToRoute('sortie_liste');
+
+    }
+
+    /**
+     * @Route("/ajouterVille/", name="ajouterVille")
+     */
+    public function creerVille(Request $request, EntityManagerInterface $entityManager){
+
+        $ville = new Ville();
+        $villeForm = $this->createForm(VilleType::class, $ville);
+
+        $villeForm->handleRequest($request);
+        if($villeForm->isSubmitted() && $villeForm->isValid()){
+
+            $entityManager->persist($ville);
+            $entityManager->flush();
+            $this->addFlash('Success', 'Votre ville a été ajoutée avec succès');
+            return $this->redirectToRoute('sortie_liste');
+        }
+
+        return $this->render('sortie/creationVille.html.twig', [
+            'villeForm' => $villeForm->createView()
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/ajouterLieu/", name="ajouterLieu")
+     */
+    public function ajouterLieu(
+        Request                $request,
+        EntityManagerInterface $entityManager
+    ): Response
+    {
+        $lieu = new Lieu();
+        $lieuForm = $this->createForm(LieuType::class, $lieu);
+        $lieuForm->handleRequest($request);
+        if($lieuForm->isSubmitted() && $lieuForm->isValid()){
+
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+            $this->addFlash('Success', 'Votre lieu a été ajoutée avec succès');
+            return $this->redirectToRoute('sortie_creationSortie');
+        }
+
+        return $this->render('sortie/createLieu.html.twig', [
+            'lieuForm' => $lieuForm->createView(),
+        ]);
 
     }
 

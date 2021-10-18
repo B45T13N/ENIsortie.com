@@ -7,6 +7,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -38,6 +39,7 @@ class CreationSortieType extends AbstractType
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
             ])
+
 
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,

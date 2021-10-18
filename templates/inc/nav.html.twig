@@ -2,7 +2,7 @@
     <ul>
         {% if is_granted("ROLE_ADMIN") %}
             <li>
-                <a href="#">Villes</a>
+                <a href="{{ path("sortie_ajouterVille") }}">Villes</a>
             </li>
             <li>
                 <a href="#">Campus</a>
