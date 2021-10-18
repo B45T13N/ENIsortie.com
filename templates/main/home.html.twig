@@ -6,47 +6,48 @@
 {% endblock %}
 
 {% block body %}
-    <main>
-        <div>
+    <main class="container-fluid">
+        <div class="d-none d-sm-none d-md-block">
             <h2> Date du jour : {{ "now" | date('d/m/Y') }}</h2>
             <h2> Participant : {{ app.user.prenom }}.{{  app.user.nom |slice(0,1) }}</h2>
         </div>
 
 
-       <div>
-        <div>
+
+
+        <div class="d-none d-sm-none d-md-block">
             <h3> Filter les sorties :</h3>
 
             {{ form_start(filtreForm) }}
             {{ form_widget(filtreForm) }}
             <button type="submit">Rechercher</button>
             {{ form_end(filtreForm) }}
-        </div>
-           <div>
-               <div>
-                   <input type="checkbox" checked value="orga" name="orga">
-                   <label for="orga">Sorties dont je suis l'organisateur/trice</label>
-               </div>
-               <div>
-                   <input type="checkbox" checked value="inscrit" name="inscrit">
-                   <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
-               </div>
-               <div>
-                   <input type="checkbox" checked value="pas_inscrit" name="pas_inscrit">
-                   <label for="pas_inscrit">Sorties auxquelles je ne suis pas inscrit/e</label>
-               </div>
-               <div>
-                   <input type="checkbox" value="passe" name="passe">
-                   <label for="passe">Sorties passées</label>
-               </div>
+
+            <div>
+                <div>
+                    <input type="checkbox" checked value="orga" name="orga">
+                    <label for="orga">Sorties dont je suis l'organisateur/trice</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked value="inscrit" name="inscrit">
+                    <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
+                </div>
+                <div>
+                    <input type="checkbox" checked value="pas_inscrit" name="pas_inscrit">
+                    <label for="pas_inscrit">Sorties auxquelles je ne suis pas inscrit/e</label>
+                </div>
+                <div>
+                    <input type="checkbox" value="passe" name="passe">
+                    <label for="passe">Sorties passées</label>
+                </div>
            </div>
-       </div>
+        </div>
 
         <article class="container d-flex h-100">
             {% include 'inc/affichageListe.html.twig' %}
         </article>
 
-        <div class="boutonCreateSortie">
+        <div class="boutonCreateSortie d-none d-sm-none d-md-block">
             <a href="{{ path('sortie_creationSortie') }}" class="btn btn-lg btn-primary" type="button">Créer une sortie</a>
         </div>
     </main>

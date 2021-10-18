@@ -2,7 +2,7 @@
 {% set class = "" %}
 {% set break = false %}
 
-<table class="align-self-xl-center">
+<table class="align-self-center">
     <thead>
     <tr>
         <th>
@@ -11,22 +11,25 @@
         <th>
             Date de la sortie
         </th>
-        <th>
+        <th class="d-lg-none">
+            Lieu
+        </th>
+        <th class="d-none d-sm-none d-md-table-cell">
             Clôture
         </th>
-        <th>
+        <th class="d-none d-sm-none d-md-table-cell">
             Inscrits/places
         </th>
-        <th>
+        <th class="d-none d-sm-none d-md-table-cell">
             Etat
         </th>
-        <th>
+        <th class="d-none d-sm-none d-md-table-cell">
             Inscrit
         </th>
-        <th>
+        <th class="d-none d-sm-none d-md-table-cell">
             Organisateur
         </th>
-        <th>
+        <th class="d-none d-sm-none d-md-table-cell">
             Action
         </th>
     </tr>
@@ -59,31 +62,35 @@
             {% set class = "" %}
 
                 <td>
-                    {{ sortie.nom }}
+                    <a href="{{ path('sortie_affichageSortie', {'id':sortie.id}) }}" class="d-lg-none">{{ sortie.nom }}</a>
+                    <div class="d-none d-lg-block d-xl-block">{{ sortie.nom }}</div>
                 </td>
                 <td>
                     {{ sortie.date|date('d/m/Y') }}
                 </td>
-                <td>
+                <td class="d-lg-none">
+                    {{ sortie.lieu.nom }}
+                </td>
+                <td class="d-none d-sm-none d-md-table-cell">
                     {{ sortie.dateLimite|date('d/m/Y') }}
                 </td>
-                <td>
+                <td class="d-none d-sm-none d-md-table-cell">
                     {{ sortie.participant|length }}/{{ sortie.nombreInscriptionsMax }}
                 </td>
-                <td>
+                <td class="d-none d-sm-none d-md-table-cell">
                     {{ sortie.etat.libelle }}
                 </td>
-                <td>
+                <td class="d-none d-sm-none d-md-table-cell">
                     {% for participant in sortie.participant %}
                         {% if app.user.id is same as(participant.id) %}
                             X
                         {% endif %}
                     {% endfor %}
                 </td>
-                <td>
+                <td class="d-none d-sm-none d-md-table-cell">
                     <a href="{{ path('user_profile', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.prenom }}.{{ sortie.organisateur.nom|slice(0,1) }}</a>
                 </td>
-                <td>
+                <td class="d-none d-sm-none d-md-table-cell">
                     {% if app.user.id != sortie.organisateur.id%}
                         {% if sortie.etat.libelle != 'Annulée'%}
                             <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
