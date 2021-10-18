@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ProfileType;
+use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -66,23 +69,28 @@ class UserController extends AbstractController
     /**
      * @Route("/desactiver/{id}", name="desactiver")
      */
-    public function deactivateUser(int $id, UserRepository $userRepository){
+    public function deactivateUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, SortieRepository $sortieRepository){
         $user = $userRepository->find($id);
         $user->setActif(false);
-        $entityManager = $this->getDoctrine()->getManager();
+        $sorties = $sortieRepository->findBy(['organisateur'=>$user->getId()]);
+        foreach ($sorties as $sortie){
+            $entityManager->remove($sortie);
+        }
         $entityManager->persist($user);
         $entityManager->flush();
 
         return $this->redirectToRoute('sortie_liste');
     }
-    /*
+    /**
      * @Route("/delete/{id}", name="delete")
-    public function deleteUser(int $id, UserRepository $userRepository)
+     */
+    public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $user = $userRepository->find($id);
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($user);
         $entityManager->flush();
+
         return $this->redirectToRoute('sortie_liste');
     }
-*/
+
 }

@@ -70,7 +70,7 @@ class User implements UserInterface
     private $actif;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur", cascade={"persist","remove"})
      */
     private $sorties;
 
