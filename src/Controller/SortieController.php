@@ -98,7 +98,6 @@ class SortieController extends AbstractController
         if ($user->getActif() == false) {
             $this->addFlash("Error", "Ton compte est désactivé");
         } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
                 if ($request->request->get('cree')) {
                     $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
                 } else {
@@ -114,8 +113,8 @@ class SortieController extends AbstractController
             return $this->render('sortie/creationSortie.html.twig', [
                 'sortieForm' => $sortieForm->createView(),
             ]);
-        }
     }
+
 
 
     /**
