@@ -245,7 +245,9 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($idSortie);
         if(new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
             $this->addFlash("Error", "T'es trop lent, la sortie n'est plus dispo !");
-        } else{
+        } elseif($user->getCampus() != $sortie->getCampus()){
+            $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
+        }else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
             $entityManager->flush();
