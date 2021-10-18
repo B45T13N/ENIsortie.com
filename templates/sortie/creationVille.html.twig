@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %} {{ parent() }} | Ajouter une ville {% endblock %}
+
+{% block body %}
+
+    <main>
+        <h1>Ajouter une ville</h1>
+        {%for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div>
+            {{ form_start(villeForm) }}
+            {{ form_widget(villeForm) }}
+            <div>
+                <button name="cree" value="cree">Ajouter une ville</button>
+            </div>
+            {{ form_end(villeForm) }}
+        </div>
+    </main>
+
+{% endblock %}
