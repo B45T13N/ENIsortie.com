@@ -1,0 +1,5 @@
+username;nom;prenom;email;telephone;roles;campus_id
+Momo_51;Momo;Hubert;momo@sfr.com;0609010203;ROLE_USER;10
+Antoine_01;Machin;Antoine;machin@gmail.fr;0601020304;ROLE_USER;11
+Zaz0n3;Zaz;One;zaz@zaz.com;0602010304;ROLE_USER;12
+Redfox;Red;Fox;redfox@hotmail.com;0605040603;ROLE_USER;10
