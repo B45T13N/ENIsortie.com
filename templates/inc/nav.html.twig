@@ -2,7 +2,7 @@
     <ul>
         {% if is_granted("ROLE_ADMIN") %}
             <li>
-                <a href="#">Villes</a>
+                <a href="{{ path("sortie_ajouterVille") }}">Villes</a>
             </li>
             <li>
                 <a href="#">Campus</a>
@@ -15,9 +15,9 @@
         <li>
             <a href="{{ path('sortie_liste') }}">Accueil</a>
         </li>
-        <li>
+        <li><span>
             <a href="{{ path('user_editProfile') }}">Mon profil</a>
-        </li>
+        </span></li>
 
         <li>
             <a href="{{ path('app_logout') }}">Se déconnecter</a>

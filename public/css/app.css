@@ -13,6 +13,14 @@ nav li {
     margin-right: 1rem;
 }
 
+a {
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: black;
+}
+
 label {
     display: block;
     margin-top: 1rem;
@@ -24,7 +32,6 @@ select, .custom-file {
     margin-bottom: 1rem;
     box-sizing: border-box;
 
-    max-width: 50%;
 }
 
 .logForm{
@@ -33,6 +40,7 @@ select, .custom-file {
     width: 20rem;
     margin: auto;
 }
+
 
 footer{
     display: block;
@@ -65,4 +73,35 @@ body{
     background: rgb(2,0,36);
     background: radial-gradient(farthest-corner at 100% 100%, rgba(2,0,36,1) 0%, rgb(199, 199, 199) 34%, rgb(0, 89, 59) 100%);
     background-attachment: fixed;
+}
+main {
+    margin: 3rem;
+}
+
+
+
+
+
+/*------- Page création sortie   */
+
+.formulaireCreationSortie {
+    width: 50rem;
+    margin: 0 auto;
+}
+
+#titreCréerSortie{
+    text-align: center;
+}
+.btnSortie{
+    justify-content: space-between;
+    height: 3rem;
+    display: flex;
+    margin: 0 auto;
+}
+.btnSortiePublier{
+    margin-left: 5rem;
+    width: 50rem;
+}
+.btnSortieCreer{
+    width:50rem ;
 }
