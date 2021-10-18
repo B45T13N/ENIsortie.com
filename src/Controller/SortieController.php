@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
+use App\Entity\User;
 use App\Form\CancelType;
 use App\Form\CreationSortieType;
 use App\Form\FilterType;
@@ -12,6 +13,7 @@ use App\Form\LieuType;
 use App\Form\VilleType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,12 +80,24 @@ class SortieController extends AbstractController
         EtatRepository $etatRepository
     ): Response
     {
+            $user = $this->getUser();
             $currentUser = $this->getUser();
             $sortie = new Sortie();
             $sortie->setOrganisateur($currentUser);
             $sortie->setCampus($currentUser->getCampus());
 
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+            if($sortie->getDateLimite()>$sortie->getDate()){
+                $this->addFlash('error',
+                 'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
+                );
+            }
+
+            $sortieForm->handleRequest($request);
+            $etat = $etatRepository;
+        if ($user->getActif() == false){
+            $this->addFlash("Error","Ton compte est désactivé");
+        } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
                 if($request->request->get('cree')){
                     $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
@@ -114,12 +128,15 @@ class SortieController extends AbstractController
         int $idSortie
     ): Response
     {
+        $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
 
         $sortieForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($user->getActif() == false){
+            $this->addFlash("Error","Ton compte est désactivé");
+        } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if($request->request->get('cree')){
                 $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
             } else {
@@ -167,12 +184,15 @@ class SortieController extends AbstractController
         int $idSortie
     ): Response
     {
+        $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
 
         $sortieForm->handleRequest($request);
 
-        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($user->getActif() == false){
+        $this->addFlash("Error","Ton compte est désactivé");
+        } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
             $sortie->setEtat($etat);
             $entityManager->persist($sortie);
@@ -224,14 +244,20 @@ class SortieController extends AbstractController
     /**
      * @Route("/RegisterSortie/{idSortie}", name="registrationSortie")
      */
-    public function register(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager){
+    public function register(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
+    {
 
 
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
-        if(new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
+        if (new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
             $this->addFlash("Error", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getCampus() != $sortie->getCampus()){
+            $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
+        }else{
+        } else if ($user->getActif() == false){
+            $this->addFlash("Error","Ton compte est désactivé");
+        } elseif ($user->getCampus() != $sortie->getCampus()){
             $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
         }else{
             $sortie->addParticipant($user);
@@ -254,7 +280,7 @@ class SortieController extends AbstractController
 
         if($sortie->getDate() < new \DateTime()) {
             $this->addFlash("Error", "Tu ne peux plus de désinscrire petit coquin !");
-        }else{
+        } else{
             $sortie->removeParticipant($user);
             $entityManager->persist($sortie);
             $entityManager->flush();
