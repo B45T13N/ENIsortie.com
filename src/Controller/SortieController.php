@@ -84,19 +84,6 @@ class SortieController extends AbstractController
             $sortie->setCampus($currentUser->getCampus());
 
             $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-            $lieu = new Lieu();
-            $lieuForm = $this->createForm(LieuType::class, $lieu);
-            $lieuForm->handleRequest($request);
-            if($lieuForm->isSubmitted() && $lieuForm->isValid()){
-
-            $entityManager->persist($lieu);
-            $entityManager->flush();
-            $this->addFlash('Success', 'Votre lieu a été ajoutée avec succès');
-
-        }
-
-            $sortieForm->handleRequest($request);
-            $etat = $etatRepository;
             if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
                 if($request->request->get('cree')){
                     $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
@@ -111,7 +98,6 @@ class SortieController extends AbstractController
                 return $this->redirectToRoute('sortie_liste');
             }
             return $this->render('sortie/creationSortie.html.twig', [
-                'lieuForm'=> $lieuForm->createView(),
                 'sortieForm' => $sortieForm->createView(),
             ]);
 

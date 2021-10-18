@@ -16,6 +16,7 @@
         {% endfor %}
 
         <div>
+            <button id="btnDetailsLieu">Afficher détails lieu</button>
             {{ form_start(sortieForm, {'attr':{'class':"formulaireCreationSortie"}}) }}
             <button><a href="{{ path('sortie_ajouterLieu')}}">+</a></button>
             {{ form_widget(sortieForm) }}
