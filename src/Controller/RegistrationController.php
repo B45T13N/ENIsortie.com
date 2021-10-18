@@ -45,4 +45,12 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/admin", name="app_createCsvFile")
+     */
+    public function createCsvFile(Request $request): Response
+    {
+        return $this->render('registration/register.html.twig');
+    }
 }
