@@ -21,7 +21,7 @@ a:hover{
     color: black;
 }
 
-label {
+form > label {
     display: block;
     margin-top: 1rem;
 }
@@ -45,7 +45,8 @@ select, .custom-file {
 footer{
     display: block;
     text-align: center;
-    margin-top: 5rem;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.51);
 }
 header{
     margin-top: 1em;
@@ -104,4 +105,17 @@ main {
 }
 .btnSortieCreer{
     width:50rem ;
+}
+
+/* -- Tableau page d'accueil --*/
+
+th, td{
+    border: black solid 2px;
+    padding-right: 10px;
+    padding-left: 10px;
+    text-align: center;
+}
+
+table{
+    margin: 1rem;
 }
