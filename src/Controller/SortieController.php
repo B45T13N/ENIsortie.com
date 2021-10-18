@@ -80,26 +80,26 @@ class SortieController extends AbstractController
         EtatRepository $etatRepository
     ): Response
     {
-            $user = $this->getUser();
-            $currentUser = $this->getUser();
-            $sortie = new Sortie();
-            $sortie->setOrganisateur($currentUser);
-            $sortie->setCampus($currentUser->getCampus());
+        $user = $this->getUser();
+        $currentUser = $this->getUser();
+        $sortie = new Sortie();
+        $sortie->setOrganisateur($currentUser);
+        $sortie->setCampus($currentUser->getCampus());
 
-            $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-            if($sortie->getDateLimite()>$sortie->getDate()){
-                $this->addFlash('error',
-                 'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
-                );
-            }
+        $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+        if ($sortie->getDateLimite() > $sortie->getDate()) {
+            $this->addFlash('error',
+                'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
+            );
+        }
 
-            $sortieForm->handleRequest($request);
-            $etat = $etatRepository;
-        if ($user->getActif() == false){
-            $this->addFlash("Error","Ton compte est désactivé");
+        $sortieForm->handleRequest($request);
+        $etat = $etatRepository;
+        if ($user->getActif() == false) {
+            $this->addFlash("Error", "Ton compte est désactivé");
         } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-                if($request->request->get('cree')){
+                if ($request->request->get('cree')) {
                     $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
                 } else {
                     $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
@@ -114,8 +114,9 @@ class SortieController extends AbstractController
             return $this->render('sortie/creationSortie.html.twig', [
                 'sortieForm' => $sortieForm->createView(),
             ]);
-
+        }
     }
+
 
     /**
      * @Route("/ModifySortie/{idSortie}", name="modifSortie")
@@ -252,14 +253,11 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($idSortie);
         if (new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
             $this->addFlash("Error", "T'es trop lent, la sortie n'est plus dispo !");
-        } elseif($user->getCampus() != $sortie->getCampus()){
-            $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
-        }else{
-        } else if ($user->getActif() == false){
+        } elseif($user->getActif() == false){
             $this->addFlash("Error","Ton compte est désactivé");
         } elseif ($user->getCampus() != $sortie->getCampus()){
             $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
-        }else{
+        } else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
             $entityManager->flush();
