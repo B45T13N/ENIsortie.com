@@ -6,34 +6,6 @@
 
 {% block body %}
 
-   <h1>{{ user.username }}</h1>
-    <div>
-        {% if user.photo %}
-        <img src="{{ asset('photo/' ~ user.photo) }}" alt="Photo de {{ user.username }}">
-        {% else %}
-            <img src="{{ asset('photo/user.png') }}" alt="Photo de {{ user.username }}">
-        {% endif %}
-    </div>
-    <div>
-        <a>Prénom : {{ user.prenom }}</a>
-    </div>
-    <div>
-        <a>Nom : {{ user.nom }}</a>
-    </div>
-    <div>
-        <a> Téléphone : {{ user.telephone }}</a>
-    </div>
-    <div>
-        <a>Email : {{ user.email }}</a>
-    </div>
-    <div>
-        <a>Campus : {{ user.campus.nom}}</a>
-    </div>
-    {% if app.user.admin == true %}
-        <a href="{{ path('user_desactiver', {'id': user.id}) }}" class="btn">Desactiver l'utilisateur</a>
-        <a href="{{ path('user_delete', {'id': user.id}) }}" class="btn">Delete User</a>
-    {% endif %}
-    <a type="button" {{ path('sortie_liste') }}>Retour</a>
     <main class="container-fluid">
        <h1>{{ user.username }}</h1>
         <div>
@@ -59,6 +31,11 @@
             <a>Campus : {{ user.campus.nom}}</a>
         </div>
         <a type="button" {{ path('sortie_liste') }}>Retour</a>
+        {% if app.user.admin == true %}
+            <a href="{{ path('user_desactiver', {'id': user.id}) }}" class="btn">Desactiver l'utilisateur</a>
+            <a href="{{ path('user_delete', {'id': user.id}) }}" class="btn">Delete User</a>
+        {% endif %}
     </main>
+
 {% endblock %}
 
