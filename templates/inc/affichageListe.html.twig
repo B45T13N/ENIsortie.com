@@ -45,7 +45,7 @@
                         {% set class = class ~ " inscrit"%}
                         {% set break = true %}
                     {% elseif loop.last and not break%}
-                        {% set class = class ~ " pas inscrit"%}
+                        {% set class = class ~ " pas_inscrit"%}
                     {% endif %}
                 {% endfor %}
                 {% set break = false %}
@@ -54,7 +54,7 @@
                 {% set class = class ~ " passe" %}
             {% endif %}
 
-            <tr class="{{ class }}">
+            <tr class="trSortie {{ class }}">
 
             {% set class = "" %}
 
@@ -88,7 +88,7 @@
                         {% if sortie.etat.libelle != 'Annulée'%}
                             <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                         {% endif %}
-                        {% if sortie.etat.libelle is same as("Ouverte") %}
+                        {% if sortie.etat.libelle is same as("Ouverte") and app.user.campus == sortie.campus %}
                             {% set break = false %}
                             {#  Condition pour affichage de s'inscrire ou se désister                              #}
                             {% for participant in sortie.participant %}

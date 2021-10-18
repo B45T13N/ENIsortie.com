@@ -6,14 +6,6 @@
 {% block body %}
 
     <main>
-        {%for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="flash flash-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-
         <div>
             {{ form_start(sortieForm) }}
             {{ form_widget(sortieForm) }}

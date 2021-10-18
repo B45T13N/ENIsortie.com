@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block head_js %}
+    <script src="{{ asset('js/filtrePageAccueil.js')}}"></script>
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <main>
         <div>
@@ -19,19 +24,19 @@
         </div>
            <div>
                <div>
-               <input type="checkbox" checked value="orga" >
-               <label for="orga">Sorties dont je suis l'organisateur/trice</label>
+                   <input type="checkbox" checked value="orga" name="orga">
+                   <label for="orga">Sorties dont je suis l'organisateur/trice</label>
                </div>
                <div>
-               <input type="checkbox" checked value="inscrit">
-               <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
-           </div>
+                   <input type="checkbox" checked value="inscrit" name="inscrit">
+                   <label for="inscrit">Sorties auxquelles je suis inscrit/e</label>
+               </div>
                <div>
-                   <input type="checkbox" checked value="pas_inscrit">
+                   <input type="checkbox" checked value="pas_inscrit" name="pas_inscrit">
                    <label for="pas_inscrit">Sorties auxquelles je ne suis pas inscrit/e</label>
                </div>
                <div>
-                   <input type="checkbox" value="passe">
+                   <input type="checkbox" value="passe" name="passe">
                    <label for="passe">Sorties passées</label>
                </div>
            </div>
