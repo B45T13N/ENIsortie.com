@@ -77,12 +77,11 @@ class SortieRepository extends ServiceEntityRepository
 
         foreach ($sorties as $sortie) {
 
-//            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' &&
-//              $sortie->getEtat()->getLibelle() != 'Clôturée')
-//            {
-//                $sortie->setEtat($etatPasse);
-//                $this->_em->persist($sortie);
-//            }
+            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getDate() < new \DateTime())
+            {
+                $sortie->setEtat($etatPasse);
+                $this->_em->persist($sortie);
+            }
 
             if ($sortie->getEtat()->getLibelle() != 'Clôturée' && $sortie->getEtat()->getLibelle() != 'Annulée'
                 && ($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {

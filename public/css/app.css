@@ -21,7 +21,7 @@ a:hover{
     color: black;
 }
 
-label {
+form > label {
     display: block;
     margin-top: 1rem;
 }
@@ -45,7 +45,7 @@ select, .custom-file {
 footer{
     display: block;
     text-align: center;
-    margin-top: 5rem;
+    background: rgba(255, 255, 255, 0.51);
 }
 header{
     margin-top: 1em;
@@ -55,14 +55,10 @@ header{
     justify-content: space-between;
 }
 .logoEni{
-    background-image: url(../photo/sortir.png);
     width: 100%;
-    height: auto;
-    background-repeat: no-repeat;
-    background-size: contain;
 }
 .navBarre{
-    width: 80%;
+    width: 100%;
 }
 .avatar{
     border: 1px solid #999999;
@@ -73,9 +69,6 @@ body{
     background: rgb(2,0,36);
     background: radial-gradient(farthest-corner at 100% 100%, rgba(2,0,36,1) 0%, rgb(199, 199, 199) 34%, rgb(0, 89, 59) 100%);
     background-attachment: fixed;
-}
-main {
-    margin: 3rem;
 }
 
 
@@ -104,4 +97,18 @@ main {
 }
 .btnSortieCreer{
     width:50rem ;
+}
+
+/* -- Tableau page d'accueil --*/
+
+th, td{
+    border: black solid 2px;
+    padding-right: 10px;
+    padding-left: 10px;
+    text-align: center;
+}
+
+.boutonCreateSortie{
+    margin-top: 5rem;
+
 }

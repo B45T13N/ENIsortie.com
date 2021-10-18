@@ -3,7 +3,7 @@
 {% block title %} {{ parent() }}Connexion{% endblock %}
 
 {% block body %}
-    <main>
+    <main class="container-fluid">
         <form method="post" class="logForm">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
