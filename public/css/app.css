@@ -7,10 +7,18 @@ nav ul {
     list-style: none;
     padding-right: 1rem;
     padding-top: 1rem;
-}
+    }
 
 nav li {
     margin-right: 1rem;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+    color: black;
 }
 
 label {
