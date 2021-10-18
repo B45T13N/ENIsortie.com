@@ -5,18 +5,20 @@
 {% endblock %}
 
 {% block body %}
-    <div>
-        {% if app.user.photo %}
-            <img class="avatar" src="{{ asset('photo/' ~ app.user.photo) }}" alt="Photo de {{ app.user.username }}">
-        {% else %}
-            <img class="avatar" src="{{ asset('photo/user.png') }}" alt="Photo de {{ app.user.username }}">
-        {% endif %}
-    </div>
-    <div>
-        <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
-        {{ form_start(editProfileForm) }}
-        {{ form_widget(editProfileForm) }}
-        <button>Enregistrer</button>
-        {{ form_end(editProfileForm) }}
-    </div>
+    <main class="container-fluid">
+        <div>
+            {% if app.user.photo %}
+                <img class="avatar" src="{{ asset('photo/' ~ app.user.photo) }}" alt="Photo de {{ app.user.username }}">
+            {% else %}
+                <img class="avatar" src="{{ asset('photo/user.png') }}" alt="Photo de {{ app.user.username }}">
+            {% endif %}
+        </div>
+        <div>
+            <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
+            {{ form_start(editProfileForm) }}
+            {{ form_widget(editProfileForm) }}
+            <button>Enregistrer</button>
+            {{ form_end(editProfileForm) }}
+        </div>
+    </main>
 {% endblock %}

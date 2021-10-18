@@ -208,6 +208,7 @@ class User implements UserInterface
     {
         $this->telephone = $telephone;
 
+
         return $this;
     }
 
