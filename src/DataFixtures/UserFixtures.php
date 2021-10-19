@@ -30,10 +30,10 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setEmail($faker->email());
             $password = $this->encoder->encodePassword($user, "admin");
             $user->setPassword($password);
-            $user->setAdmin(true);
+            $user->setAdmin(false);
             $user->setPrenom($faker->firstName());
-            $user->setTelephone(0101010101);
-            $user->setUsername($user->getPrenom().'_'.mt_rand(1,50));
+            $user->setTelephone(trim($faker->phoneNumber()));
+            $user->setUsername($user->getPrenom()."_".mt_rand(1,10));
 
             $manager->persist($user);
             $this->addReference(User::class.'_'.$i, $user);

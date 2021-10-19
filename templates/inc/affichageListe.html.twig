@@ -2,7 +2,7 @@
 {% set class = "" %}
 {% set break = false %}
 
-<table class="align-self-center">
+<table class="align-self-center ">
     <thead>
     <tr>
         <th>
@@ -106,7 +106,9 @@
                                     <a href="{{ path('sortie_sinscrire', {'idSortie': sortie.id}) }}">- S'inscrire1</a>
                                 {% endif %}
                             {% else %}
-                                <a href="{{ path('sortie_sinscrire', {'idSortie': sortie.id}) }}">- S'inscrire2</a>
+                                {% if sortie.participant|length < sortie.nombreInscriptionsMax %}
+                                    <a href="{{ path('sortie_sinscrire', {'idSortie': sortie.id}) }}">- S'inscrire2</a>
+                                {% endif %}
                             {% endfor %}
                         {% endif %}
                     {% else %}
