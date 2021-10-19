@@ -50,7 +50,7 @@ class User implements UserInterface
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=20)
      */
     private $telephone;
 
