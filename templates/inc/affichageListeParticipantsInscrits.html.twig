@@ -12,7 +12,7 @@
         {% for participant in listeParticipants %}
         <tr>
             <td>
-                <a href="{{ path('user_profile', {'id': participant.id}) }}">{{ participant.username }}</a>
+                <a href="{{ path('utilisateur_profil', {'id': participant.id}) }}">{{ participant.username }}</a>
             </td>
             <td class="d-none d-sm-none d-md-table-cell">
                 {{ participant.prenom }}  {{ participant.nom|upper }}

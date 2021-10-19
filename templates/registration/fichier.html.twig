@@ -2,11 +2,8 @@
 
 {% block body %}
 
-    <form method="post" action="{{ path('app_fichier') }}">
-        <input name="fileCsv" type="file">
-        <label for="fileCsv">
-            Importer un fichier
-        </label>
+    <form method="post" action="{{ path('admin_app_fichier') }}" enctype="multipart/form-data">
+        <input type="file" name="fileCsv">
         <button value="btnCsv" type="submit">Import CSV</button>
     </form>
 {% endblock %}

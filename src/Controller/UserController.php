@@ -32,6 +32,8 @@ class UserController extends AbstractController
             $editProfileForm = $this->createForm(ProfileType::class, $user);
             $editProfileForm->handleRequest($request);
 
+
+
             if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()){
                 $user->setPassword(
                     $userPasswordEncoderInterface->encodePassword(

@@ -10,6 +10,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\YamlEncoder;
@@ -29,10 +30,12 @@ class CreateUsersFromCsvFileCommand extends Command
         EntityManagerInterface $entityManager,
         string                 $dataDirectory,
         UserRepository         $userRepository,
-        CampusRepository $campusRepository
+        CampusRepository $campusRepository,
+        UserPasswordEncoderInterface $userPasswordEncoderInterface
     )
     {
         parent::__construct();
+        $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
         $this->dataDirectory = $dataDirectory;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
@@ -88,53 +91,47 @@ class CreateUsersFromCsvFileCommand extends Command
 
     public function createUsers(string $fichierCsv): void
     {
-        $this->io->section('CREATION DES UTILISTAEURS A PARTIR DU FICHIER');
-
-        $usersCreated = 0;
 
 
         foreach ($this->getDataFromFile($fichierCsv) as $row) {
             foreach ($row as $value){
 
-                $table2 = explode(';', $value);
-
-
+                    $table2 = explode(';', $value);
 
                     $user = $this->userRepository->findOneBy([
-                        'username'=>$table2['0']
+                        'username'=>$table2[0]
                     ]);
 
-              if (!$user){
+                    if (!$user){
 
-            $campus = $this->campusRepository->find($table2[6]);
-            $user = new User();
-            $user->setUsername($table2[0])
-                ->setPassword('password')
-                ->setNom($table2[1])
-                ->setPrenom($table2[2])
-                ->setEmail($table2[3])
-                ->setTelephone($table2[4])
-                ->setRoles(["ROLE_USER"])
-                ->setAdmin(false)
-                ->setActif(true)
-                ->setCampus($campus);
+                    $campus = $this->campusRepository->findOneBy(['nom' => $table2[6]]);
+                    $user = new User();
+                    $user->setUsername($table2[0])
+                        ->setPassword($this->userPasswordEncoderInterface->encodePassword($user,'password'))
+                        ->setNom($table2[1])
+                        ->setPrenom($table2[2])
+                        ->setEmail($table2[3])
+                        ->setTelephone($table2[4])
+                        ->setAdmin(false)
+                        ->setActif(true)
+                        ->setCampus($campus);
+                    if($table2[5] == 'administrateur' or $table2[5] == 'admin') {
+                        $user->setRoles(['ROLE_ADMIN'])
+                            ->setAdmin(true);
+                    } else{
+                        $user->setRoles(['ROLE_USER'])
+                            ->setAdmin(false);
+                    }
 
 
-            $this->entityManager->persist($user);
 
-            $usersCreated++;
-              }
+                    $this->entityManager->persist($user);
+
+                    }
         }
             $this->entityManager->flush();
         }
 
-        if ($usersCreated >= 1) {
-            $string = "{$usersCreated} UTILISATEURS CREES EN BDD";
-        } else {
-            $string = 'AUNCUN UTILISATEUR CREE EN BDD';
-        }
-
-        $this->io->success($string);
     }
 }
 

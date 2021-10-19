@@ -8,7 +8,8 @@
 
         {{ form_start(registrationForm) }}
            {{ form_widget(registrationForm) }}
-            <button class="btn btn-primary">Enregistrer</button> <button class="btn btn-primary">Import CSV</button>
+            <button class="btn btn-primary">Enregistrer</button>
+        <a href="{{ path('admin_app_fichier') }}" class="btn btn-primary">Import CSV</a>
         {{ form_end(registrationForm) }}
     </main>
 {% endblock %}
