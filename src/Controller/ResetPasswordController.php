@@ -19,7 +19,7 @@ use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 /**
- * @Route("/reset-password")
+ * @Route("/motDePasseOublie")
  */
 class ResetPasswordController extends AbstractController
 {
@@ -35,7 +35,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Display & process form to request a password reset.
      *
-     * @Route("", name="app_forgot_password_request")
+     * @Route("", name="motDePasseOublie")
      */
     public function request(Request $request, MailerInterface $mailer): Response
     {
@@ -57,7 +57,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Confirmation page after a user has requested a password reset.
      *
-     * @Route("/check-email", name="app_check_email")
+     * @Route("/VerificationEmail", name="VerificationEmail")
      */
     public function checkEmail(): Response
     {
@@ -139,7 +139,7 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute('VerificationEmail');
         }
 
         try {
@@ -154,7 +154,7 @@ class ResetPasswordController extends AbstractController
             //     $e->getReason()
             // ));
 
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute('VerificationEmail');
         }
 
         $email = (new TemplatedEmail())
@@ -172,6 +172,6 @@ class ResetPasswordController extends AbstractController
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 
-        return $this->redirectToRoute('app_check_email');
+        return $this->redirectToRoute('VerificationEmail');
     }
 }
