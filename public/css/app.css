@@ -2,6 +2,10 @@ img {
     max-width: 150px;
 }
 
+h2, h3{
+    text-align: center;
+}
+
 nav ul {
     display: flex;
     list-style: none;
@@ -11,6 +15,18 @@ nav ul {
 
 nav li {
     margin-right: 1rem;
+}
+
+.btn:hover{
+    transition-duration: 0.5s;
+    border-color: black;
+    background: #000000;
+}
+
+.btn{
+    background-color: #00b0a6;
+    border-color: #00b0a6;
+    margin-bottom: 2.5rem;
 }
 
 a {
@@ -101,12 +117,23 @@ body{
 
 /* -- Tableau --*/
 
+article{
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.62);
+    border: rgb(255, 255, 255) solid 2px;
+    margin: 50px auto;
+    width: 500px;
+
+}
+
 table{
     margin: 2em;
 }
 
 th, td{
-    border: black solid 2px;
+    border: #707070 solid 2px;
+    color: #282e4b;
+    background: rgba(55, 63, 79, 0.19);
     padding-right: 10px;
     padding-left: 10px;
     text-align: center;
@@ -124,4 +151,8 @@ span{
 
 .descrText{
     text-align: justify;
+}
+
+.affichageListeParticipant{
+    max-width: fit-content;
 }

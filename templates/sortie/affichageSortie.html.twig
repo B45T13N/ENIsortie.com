@@ -5,7 +5,7 @@
     <main class="container-fluid">
         <h2>Afficher une sortie</h2>
 
-        <p class="affichageArticle">Nom de la sortie : <span class="">{{ sortieDetails.nom }}</span></p>
+        <p class="affichageArticle">Nom de la sortie : <span>{{ sortieDetails.nom }}</span></p>
         <p class="affichageArticle">Date et heure de la sortie : <span>{{ sortieDetails.date|date('m/d/Y') }}</span></p>
         <p class="affichageArticle">Date limite d'inscription : <span>{{ sortieDetails.dateLimite|date('m/d/Y') }}</span></p>
         <p class="affichageArticle">Nombre de places : <span>{{ sortieDetails.nombreInscriptionsMax }}</span></p>
@@ -18,10 +18,13 @@
         <p class="affichageArticle">Code postal : <span>{{ sortieDetails.lieu.ville.codePostal }}</span></p>
         <p class="affichageArticle">Latitude : <span>{{ sortieDetails.lieu.latitude }}</span></p>
         <p class="affichageArticle">Longitude : <span>{{ sortieDetails.lieu.longitude }}</span></p>
-        <a type="btn btn-primary" {{ path('sortie_accueil') }}>Retour</a>
-    </main>
-{% include 'inc/affichageListeParticipantsInscrits.html.twig' %}
+        <a class="btn btn-primary" href="{{ path('sortie_accueil') }}">Retour</a>
 
+        <h3>Liste des participants inscrits :</h3>
+        <article class="affichageListeParticipant">
+            {% include 'inc/affichageListeParticipantsInscrits.html.twig' %}
+        </article>
+    </main>
 {% endblock %}
 
 {% block title %}

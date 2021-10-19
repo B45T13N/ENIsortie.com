@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\CampusRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -89,9 +90,9 @@ class CreateUsersFromCsvFileCommand extends Command
         return $data;
     }
 
-    public function createUsers(string $fichierCsv): void
+    public function createUsers(string $fichierCsv): bool
     {
-
+        $boolean = true;
 
         foreach ($this->getDataFromFile($fichierCsv) as $row) {
             foreach ($row as $value){
@@ -112,7 +113,6 @@ class CreateUsersFromCsvFileCommand extends Command
                         ->setPrenom($table2[2])
                         ->setEmail($table2[3])
                         ->setTelephone($table2[4])
-                        ->setAdmin(false)
                         ->setActif(true)
                         ->setCampus($campus);
                     if($table2[5] == 'administrateur' or $table2[5] == 'admin') {
@@ -127,11 +127,14 @@ class CreateUsersFromCsvFileCommand extends Command
 
                     $this->entityManager->persist($user);
 
+                    $boolean = true;
+                    } else{
+                        $boolean = false;
                     }
         }
             $this->entityManager->flush();
         }
-
+        return $boolean;
     }
 }
 
