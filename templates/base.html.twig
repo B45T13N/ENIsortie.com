@@ -29,7 +29,7 @@
 <body>
         <header class="container">
             <div>
-                <a href="{{ path('sortie_liste') }}"><img src="{{ asset('photo/sortir.png') }}" alt="Logo App" class="logoEni col-lg-5 col-xs-12 img-fluid"></a>
+                <a href="{{ path('sortie_accueil') }}"><img src="{{ asset('photo/sortir.png') }}" alt="Logo App" class="logoEni col-lg-5 col-xs-12 img-fluid"></a>
             </div>
             <div class="navBarre col-lg-7 col-xs-12 text-nowrap d-none d-lg-block d-xl-block">
                 {% include 'inc/nav.html.twig'%}
@@ -49,7 +49,7 @@
                 Bienvenu sur Sortie.com !
             {% endblock %}
 
-        <footer class="card-footer fixed-bottom ">
+        <footer class="card-footer ">
             {% include 'inc/footer.html.twig' %}
         </footer>
 </body>

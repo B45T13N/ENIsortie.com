@@ -7,23 +7,15 @@
 
     <main class="container-fluid">
         <h1 id="titreCréerSortie">Créer une sortie</h1>
-        {%for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="flash flash-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
 
         <div>
-            <button id="btnDetailsLieu">Afficher détails lieu</button>
             {{ form_start(sortieForm, {'attr':{'class':"formulaireCreationSortie"}}) }}
-            <button><a href="{{ path('sortie_ajouterLieu')}}">+</a></button>
+            <a href="{{ path('sortie_ajouterLieu')}}" class="btn btn-primary">Ajouter un lieu</a>
             {{ form_widget(sortieForm) }}
             {{ form_errors(sortieForm) }}
             <div class="btnSortie">
-                <button name="cree" value="cree" class="btnSortieCreer">Créer une sortie</button>
-                <button name="publier" value="publier"class="btnSortiePublier">Publier une sortie</button>
+                <button name="cree" value="cree" class="btnSortieCreer btn btn-primary">Créer une sortie</button>
+                <button name="publier" value="publier"class="btnSortiePublier btn btn-primary">Publier une sortie</button>
             </div>
                 {{ form_end(sortieForm) }}
         </div>

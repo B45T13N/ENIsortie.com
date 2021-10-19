@@ -15,12 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * @Route("/profil", name="user_")
+ * @Route("/membre/profil/", name="utilisateur_")
  */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/modifier", name="editProfile")
+     * @Route("modifier", name="modifierProfil")
      */
     public function editProfile(UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
@@ -47,7 +47,7 @@ class UserController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('message', 'Votre profil a bien été modifier !!');
-                return $this->redirectToRoute('sortie_liste', ['id' => $user->getId()]);
+                return $this->redirectToRoute('sortie_accueil', ['id' => $user->getId()]);
 
             }
         }
@@ -59,7 +59,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="profile")
+     * @Route("{id}", name="profil")
      */
     public function profile(int $id, Request $request, UserRepository $userRepository): Response
     {
@@ -67,7 +67,7 @@ class UserController extends AbstractController
         return $this->render('user/profile.html.twig', ["user" => $user]);
     }
     /**
-     * @Route("/desactiver/{id}", name="desactiver")
+     * @Route("admin/desactiver/{id}", name="desactiver")
      */
     public function deactivateUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, SortieRepository $sortieRepository){
         $user = $userRepository->find($id);
@@ -79,10 +79,10 @@ class UserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return $this->redirectToRoute('sortie_liste');
+        return $this->redirectToRoute('sortie_accueil');
     }
     /**
-     * @Route("/delete/{id}", name="delete")
+     * @Route("admin/supprimer/{id}", name="supprimer")
      */
     public function deleteUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
@@ -90,7 +90,7 @@ class UserController extends AbstractController
         $entityManager->remove($user);
         $entityManager->flush();
 
-        return $this->redirectToRoute('sortie_liste');
+        return $this->redirectToRoute('sortie_accueil');
     }
 
 }

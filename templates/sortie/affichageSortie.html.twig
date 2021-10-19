@@ -5,19 +5,20 @@
     <main class="container-fluid">
         <h2>Afficher une sortie</h2>
 
-        <p>Nom de la sortie : {{ sortieDetails.nom }}</p>
-        <p>Date et heure de la sortie : {{ sortieDetails.date|date('m/d/Y') }}</p>
-        <p>Date limite d'inscription : {{ sortieDetails.dateLimite|date('m/d/Y') }}</p>
-        <p>Nombre de places : {{ sortieDetails.nombreInscriptionsMax }}</p>
-        <p>Durée : {{ sortieDetails.duree }} minutes</p>
-        <p>Description et infos : {{ sortieDetails.description }}</p>
-        <p>Campus : {{ sortieDetails.campus.nom }}</p>
-        <p>Lieu : {{ sortieDetails.lieu.nom }}</p>
-        <p>Rue : {{ sortieDetails.lieu.rue }}</p>
-        <p>Ville : {{ sortieDetails.lieu.ville.nom }}</p>
-        <p>Code postal : {{ sortieDetails.lieu.ville.codePostal }}</p>
-        <p>Latitude : {{ sortieDetails.lieu.latitude }}</p>
-        <p>Longitude : {{ sortieDetails.lieu.longitude }}</p>
+        <p class="affichageArticle">Nom de la sortie : <span class="">{{ sortieDetails.nom }}</span></p>
+        <p class="affichageArticle">Date et heure de la sortie : <span>{{ sortieDetails.date|date('m/d/Y') }}</span></p>
+        <p class="affichageArticle">Date limite d'inscription : <span>{{ sortieDetails.dateLimite|date('m/d/Y') }}</span></p>
+        <p class="affichageArticle">Nombre de places : <span>{{ sortieDetails.nombreInscriptionsMax }}</span></p>
+        <p class="affichageArticle">Durée : <span>{{ sortieDetails.duree }} minutes</span></p>
+        <p class="descrText">Description et infos : <br><span class="">{{ sortieDetails.description }}</span></p>
+        <p class="affichageArticle">Campus : <span>{{ sortieDetails.campus.nom }}</span></p>
+        <p class="affichageArticle">Lieu : <span>{{ sortieDetails.lieu.nom }}</span></p>
+        <p class="affichageArticle">Rue : <span>{{ sortieDetails.lieu.rue }}</span></p>
+        <p class="affichageArticle">Ville : <span>{{ sortieDetails.lieu.ville.nom }}</span></p>
+        <p class="affichageArticle">Code postal : <span>{{ sortieDetails.lieu.ville.codePostal }}</span></p>
+        <p class="affichageArticle">Latitude : <span>{{ sortieDetails.lieu.latitude }}</span></p>
+        <p class="affichageArticle">Longitude : <span>{{ sortieDetails.lieu.longitude }}</span></p>
+        <a type="btn btn-primary" {{ path('sortie_accueil') }}>Retour</a>
     </main>
 {% include 'inc/affichageListeParticipantsInscrits.html.twig' %}
 

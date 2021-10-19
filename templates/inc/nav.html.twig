@@ -5,18 +5,15 @@
                 <a href="{{ path("sortie_ajouterVille") }}">Villes</a>
             </li>
             <li>
-                <a href="#">Campus</a>
-            </li>
-            <li>
-                <a href="{{ path('app_register') }}">Créer un utilisateur</a>
+                <a href="{{ path('admin_enregistrement') }}">Créer un utilisateur</a>
             </li>
         {% endif %}
         {% if app.user %}
         <li>
-            <a href="{{ path('sortie_liste') }}">Accueil</a>
+            <a href="{{ path('sortie_accueil') }}">Accueil</a>
         </li>
         <li><span>
-            <a href="{{ path('user_editProfile') }}">Mon profil</a>
+            <a href="{{ path('utilisateur_modifierProfil') }}">Mon profil</a>
         </span></li>
 
         <li>

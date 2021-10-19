@@ -4,7 +4,8 @@
     <thead>
         <tr>
             <th>Pseudo</th>
-            <th>Nom</th>
+            <th class="d-none d-sm-none d-md-table-cell">Nom</th>
+            <th class="d-lg-none">Campus</th>
         </tr>
     </thead>
     <tbody>
@@ -13,8 +14,11 @@
             <td>
                 <a href="{{ path('user_profile', {'id': participant.id}) }}">{{ participant.username }}</a>
             </td>
-            <td>
+            <td class="d-none d-sm-none d-md-table-cell">
                 {{ participant.prenom }}  {{ participant.nom|upper }}
+            </td>
+            <td class="d-lg-none">
+                {{ participant.campus.nom }}
             </td>
 
         </tr>

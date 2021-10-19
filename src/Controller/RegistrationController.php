@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
+/**
+ * @Route("/admin/", name="admin_")
+ */
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="app_register")
+     * @Route("enregistrementUtilisateur", name="enregistrement")
      */
     public function register(Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface): Response
     {
@@ -38,7 +40,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
 
         return $this->render('registration/register.html.twig', [

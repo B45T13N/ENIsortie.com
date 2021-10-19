@@ -42,5 +42,4 @@ security:
 
     access_control:
             - { path: ^/admin, roles: ROLE_ADMIN }
-            - { path: ^/home, roles: ROLE_USER }
-            - { path: ^/test, roles: ROLE_USER }
+            - { path: ^/membre, roles: ROLE_USER }

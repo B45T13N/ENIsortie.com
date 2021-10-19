@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/", name="sortie_")
+ * @Route("/membre/", name="sortie_")
  */
 class SortieController extends AbstractController
 {
     /**
-     * @Route("/", name="")
+     * @Route("", name="")
      */
     public function accueil(SortieRepository $sortieRepository): Response
     {
@@ -34,7 +34,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/home", name="liste")
+     * @Route("accueil", name="accueil")
      */
     public function liste(SortieRepository $sortieRepository, Request $request): Response
     {
@@ -72,7 +72,7 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/CreateSortie/", name="creationSortie")
+     * @Route("creerSortie", name="creerSortie")
      */
     public function create(
         Request                $request,
@@ -118,7 +118,7 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/ModifySortie/{idSortie}", name="modifSortie")
+     * @Route("modifierSortie/{idSortie}", name="modifierSortie")
      */
     public function modify(
         Request                $request,
@@ -134,9 +134,12 @@ class SortieController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
-        if ($user->getActif() == false){
-            $this->addFlash("Error","Ton compte est désactivé");
-        } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($user->getActif() == false) {
+            $this->addFlash("Error", "Ton compte est désactivé");
+        }else if($user->getId() != $sortie->getOrganisateur())
+        {
+            $this->addFlash("Error","Tu n'est pas l'organisateur de cette sortie");
+        }else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if($request->request->get('cree')){
                 $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
             } else {
@@ -174,7 +177,7 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/publierSortie/{idSortie}", name="publierSortie")
+     * @Route("publierSortie/{idSortie}", name="publierSortie")
      */
     public function publierSortie(
         Request                $request,
@@ -190,9 +193,14 @@ class SortieController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
-        if ($user->getActif() == false){
-        $this->addFlash("Error","Ton compte est désactivé");
-        } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($user->getActif() == false)
+        {
+            $this->addFlash("Error","Ton compte est désactivé");
+        } else if($user->getId() != $sortie->getOrganisateur())
+        {
+            $this->addFlash("Error","Tu n'est pas l'organisateur de cette sortie");
+        }else if ($sortieForm->isSubmitted() && $sortieForm->isValid())
+        {
             $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
             $sortie->setEtat($etat);
             $entityManager->persist($sortie);
@@ -210,7 +218,7 @@ class SortieController extends AbstractController
 
     /**
      *
-     * @Route("/cancelSortie/{idSortie}", name="cancelSortie")
+     * @Route("annulerSortie/{idSortie}", name="annulerSortie")
      */
     public function cancel(Request $request, EntityManagerInterface $entityManager, EtatRepository $etatRepository, SortieRepository $sortieRepository, int $idSortie)
     {
@@ -235,14 +243,20 @@ class SortieController extends AbstractController
             $this->addFlash('Success', 'Votre sortie a été annulée avec succès');
             return $this->redirectToRoute('sortie_liste');
         }
-        return $this->render('sortie/cancelSortie.html.twig', [
-            'cancelForm' => $cancelForm->createView(),
-            'sortie' => $sortie,
-        ]);
+        if($this->getUser()->getId() == $sortie->getOrganisateur() || $this->getUser()->getAdmin() == true) {
+
+            return $this->render('sortie/cancelSortie.html.twig', [
+                'cancelForm' => $cancelForm->createView(),
+                'sortie' => $sortie,
+            ]);
+        } else{
+            $this->addFlash('Error', "Tu n'es pas l'admin ou l'organisateur de cette sortie !");
+            return $this->redirectToRoute('sortie_liste');
+        }
     }
 
     /**
-     * @Route("/RegisterSortie/{idSortie}", name="registrationSortie")
+     * @Route("sinscrire/{idSortie}", name="sinscrire")
      */
     public function register(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
     {
@@ -267,7 +281,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/seDesister/{idSortie}", name="seDesisterSortie")
+     * @Route("seDesister/{idSortie}", name="seDesister")
      */
     public function seDesister(int $idSortie, SortieRepository $sortieRepository, EntityManagerInterface $entityManager){
 
@@ -287,7 +301,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/ajouterVille/", name="ajouterVille")
+     * @Route("ajouterVille", name="ajouterVille")
      */
     public function creerVille(Request $request, EntityManagerInterface $entityManager){
 

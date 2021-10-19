@@ -99,7 +99,11 @@ body{
     width:50rem ;
 }
 
-/* -- Tableau page d'accueil --*/
+/* -- Tableau --*/
+
+table{
+    margin: 2em;
+}
 
 th, td{
     border: black solid 2px;
@@ -108,7 +112,16 @@ th, td{
     text-align: center;
 }
 
-.boutonCreateSortie{
-    margin-top: 5rem;
+.affichageArticle{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
 
+span{
+    margin-right: 10px;
+}
+
+.descrText{
+    text-align: justify;
 }
