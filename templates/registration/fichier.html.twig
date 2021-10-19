@@ -3,8 +3,8 @@
 {% block body %}
 
     <form method="post" action="{{ path('admin_app_fichier') }}" enctype="multipart/form-data">
-        <input type="file" name="fileCsv">
-        <button value="btnCsv" type="submit">Import CSV</button>
+        <input type="file" name="fileCsv" class="btn btn-lg btn-primary">
+        <button class="btn btn-lg btn-primary" value="btnCsv" type="submit">Import CSV</button>
     </form>
 {% endblock %}
 
