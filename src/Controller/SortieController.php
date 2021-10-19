@@ -108,7 +108,7 @@ class SortieController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Sortie ajoutée avec succès');
-                return $this->redirectToRoute('sortie_liste');
+                return $this->redirectToRoute('sortie_accueil');
             }
             return $this->render('sortie/creationSortie.html.twig', [
                 'sortieForm' => $sortieForm->createView(),
@@ -150,7 +150,7 @@ class SortieController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Sortie ajoutée avec succès');
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
         return $this->render('sortie/creationSortie.html.twig', [
             'sortieForm' => $sortieForm->createView(),
@@ -207,7 +207,7 @@ class SortieController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Sortie publiée avec succès');
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
         return $this->render('sortie/publierSortie.html.twig', [
             'sortieForm' => $sortieForm->createView(),
@@ -241,7 +241,7 @@ class SortieController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
             $this->addFlash('Success', 'Votre sortie a été annulée avec succès');
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
         if($this->getUser()->getId() == $sortie->getOrganisateur() || $this->getUser()->getAdmin() == true) {
 
@@ -251,7 +251,7 @@ class SortieController extends AbstractController
             ]);
         } else{
             $this->addFlash('Error', "Tu n'es pas l'admin ou l'organisateur de cette sortie !");
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
     }
 
@@ -276,7 +276,7 @@ class SortieController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('sortie_liste');
+        return $this->redirectToRoute('sortie_accueil');
 
     }
 
@@ -296,7 +296,7 @@ class SortieController extends AbstractController
             $entityManager->persist($sortie);
             $entityManager->flush();
         }
-        return $this->redirectToRoute('sortie_liste');
+        return $this->redirectToRoute('sortie_accueil');
 
     }
 
@@ -314,7 +314,7 @@ class SortieController extends AbstractController
             $entityManager->persist($ville);
             $entityManager->flush();
             $this->addFlash('Success', 'Votre ville a été ajoutée avec succès');
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
 
         return $this->render('sortie/creationVille.html.twig', [
@@ -340,7 +340,7 @@ class SortieController extends AbstractController
             $entityManager->persist($lieu);
             $entityManager->flush();
             $this->addFlash('Success', 'Votre lieu a été ajoutée avec succès');
-            return $this->redirectToRoute('sortie_creationSortie');
+            return $this->redirectToRoute('sortie_creerSortie');
         }
 
         return $this->render('sortie/createLieu.html.twig', [

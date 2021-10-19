@@ -73,7 +73,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
         }
 
         else { */
-            throw new UsernameNotFoundException('Username could not be found.');
+            throw new UsernameNotFoundException('Utilisateur pas retrouvé.');
         }
 
         return $user;
@@ -98,7 +98,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('sortie_liste'));
+        return new RedirectResponse($this->urlGenerator->generate('sortie_accueil'));
 
     }
 

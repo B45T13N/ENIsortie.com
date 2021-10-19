@@ -71,7 +71,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('message', "Utilistaurs créés en BDD");
 
-            return $this->redirectToRoute('sortie_liste');
+            return $this->redirectToRoute('sortie_accueil');
         }
 
         return $this->render('registration/fichier.html.twig');
