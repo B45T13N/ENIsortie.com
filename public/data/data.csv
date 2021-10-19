@@ -1,5 +1,5 @@
 username;nom;prenom;email;telephone;roles;campus_id
-Momo_51;Momo;Hubert;momo@sfr.com;0609010203;ROLE_USER;10
-Antoine_01;Machin;Antoine;machin@gmail.fr;0601020304;ROLE_USER;11
-Zaz0n3;Zaz;One;zaz@zaz.com;0602010304;ROLE_USER;12
-Redfox;Red;Fox;redfox@hotmail.com;0605040603;ROLE_USER;10
+Momo_51;Momo;Hubert;momo@sfr.com;6090102;utilisateur;Levy
+Antoine_01;Machin;Antoine;machin@gmail.fr;6010203;administrateur;Paris-sur-Philippe
+Zaz0n3;Zaz;One;zaz@zaz.com;6020103;administrateur;Michaud-sur-Mer
+Redfox;Red;Fox;redfox@hotmail.com;6050406;utilisateur;Michaud-sur-Mer

@@ -159,7 +159,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/affichageSortie/{id}", name="affichageSortie")
+     * @Route("affichageSortie/{id}", name="affichageSortie")
      */
     public function affichageSortie(SortieRepository $sortieRepository, Request $request, int $id): Response
     {

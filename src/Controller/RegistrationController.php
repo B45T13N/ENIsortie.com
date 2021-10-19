@@ -6,6 +6,8 @@ use App\Command\CreateUsersFromCsvFileCommand;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,18 +56,16 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/fichier", name="app_fichier")
+     * @Route("fichier", name="app_fichier")
      */
-    public function enregistreFichierCsv (Request $request,
+    public function enregistreFichierCsv(Request $request,
                                           UserPasswordEncoderInterface $userPasswordEncoderInterface,
                                           CreateUsersFromCsvFileCommand $createUsersFromCsvFileCommand
     ): Response{
         $directory = '\wamp64\www\ENIsortie.com\public\data';
 
-
         if ($request->getMethod()==Request::METHOD_POST){
-            $file = $request->getContent();
-                dd($file);
+            $file = $request->files->get('fileCsv');
             $file->move($directory, $file->getClientOriginalName());
             $createUsersFromCsvFileCommand->createUsers($file->getClientOriginalName());
 
