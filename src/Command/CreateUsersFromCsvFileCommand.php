@@ -86,7 +86,7 @@ class CreateUsersFromCsvFileCommand extends Command
         return $data;
     }
 
-    private function createUsers(string $fichierCsv): void
+    public function createUsers(string $fichierCsv): void
     {
         $this->io->section('CREATION DES UTILISTAEURS A PARTIR DU FICHIER');
 
@@ -114,6 +114,7 @@ class CreateUsersFromCsvFileCommand extends Command
                 ->setPrenom($table2[2])
                 ->setEmail($table2[3])
                 ->setTelephone($table2[4])
+                ->setRoles(["ROLE_USER"])
                 ->setAdmin(false)
                 ->setActif(true)
                 ->setCampus($campus);

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Command\CreateUsersFromCsvFileCommand;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +16,9 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface): Response
+    public function register(Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface,
+                                CreateUsersFromCsvFileCommand $createUsersFromCsvFileCommand
+                                ): Response
     {
         $user = new User();
         $user->setRoles(["ROLE_USER"]);
@@ -23,6 +26,8 @@ class RegistrationController extends AbstractController
         $user->setActif(1);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -47,11 +52,27 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/admin", name="app_createCsvFile")
+     * @Route("/fichier", name="app_fichier")
      */
-    public function createCsvFile(Request $request): Response
-    {
-        return $this->render('registration/register.html.twig');
+    public function enregistreFichierCsv (Request $request,
+                                          UserPasswordEncoderInterface $userPasswordEncoderInterface,
+                                          CreateUsersFromCsvFileCommand $createUsersFromCsvFileCommand
+    ): Response{
+        $directory = '\wamp64\www\ENIsortie.com\public\data';
+
+
+        if ($request->getMethod()==Request::METHOD_POST){
+            $file = $request->getContent();
+                dd($file);
+            $file->move($directory, $file->getClientOriginalName());
+            $createUsersFromCsvFileCommand->createUsers($file->getClientOriginalName());
+
+            $this->addFlash('message', "Utilistaurs créés en BDD");
+
+            return $this->redirectToRoute('sortie_liste');
+        }
+
+        return $this->render('registration/fichier.html.twig');
     }
 
 
