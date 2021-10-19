@@ -67,10 +67,14 @@ class RegistrationController extends AbstractController
         if ($request->getMethod()==Request::METHOD_POST){
             $file = $request->files->get('fileCsv');
             $file->move($directory, $file->getClientOriginalName());
-            $createUsersFromCsvFileCommand->createUsers($file->getClientOriginalName());
+            $boolean = $createUsersFromCsvFileCommand->createUsers($file->getClientOriginalName());
 
-            $this->addFlash('message', "Utilistaurs créés en BDD");
+            if($boolean == true) {
+                $this->addFlash('success', "Utilisateurs crées en BDD");
 
+            } else{
+                $this->addFlash('danger', "Utilisateurs pas crées en BDD");
+            }
             return $this->redirectToRoute('sortie_accueil');
         }
 

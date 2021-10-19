@@ -48,7 +48,7 @@ class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('message', 'Votre profil a bien été modifier !!');
+                $this->addFlash('success', 'Votre profil a bien été modifier !!');
                 return $this->redirectToRoute('sortie_accueil', ['id' => $user->getId()]);
 
             }
@@ -71,7 +71,7 @@ class UserController extends AbstractController
     /**
      * @Route("admin/desactiver/{id}", name="desactiver")
      */
-    public function deactivateUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, SortieRepository $sortieRepository){
+    public function desactivateUser(int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, SortieRepository $sortieRepository){
         $user = $userRepository->find($id);
         $user->setActif(false);
         $sorties = $sortieRepository->findBy(['organisateur'=>$user->getId()]);
@@ -80,6 +80,8 @@ class UserController extends AbstractController
         }
         $entityManager->persist($user);
         $entityManager->flush();
+
+        $this->addFlash('success', 'Utilisateur bien désactivé ');
 
         return $this->redirectToRoute('sortie_accueil');
     }
@@ -91,6 +93,8 @@ class UserController extends AbstractController
         $user = $userRepository->find($id);
         $entityManager->remove($user);
         $entityManager->flush();
+
+        $this->addFlash('success', 'Utilisateur bien supprimé');
 
         return $this->redirectToRoute('sortie_accueil');
     }

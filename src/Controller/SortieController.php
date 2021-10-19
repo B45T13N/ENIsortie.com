@@ -96,7 +96,8 @@ class SortieController extends AbstractController
         $sortieForm->handleRequest($request);
         $etat = $etatRepository;
         if ($user->getActif() == false) {
-            $this->addFlash("Error", "Ton compte est désactivé");
+            $this->addFlash("danger", "Ton compte est désactivé");
+            return $this->redirectToRoute('sortie_accueil');
         } else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
                 if ($request->request->get('cree')) {
                     $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
@@ -135,10 +136,12 @@ class SortieController extends AbstractController
         $sortieForm->handleRequest($request);
 
         if ($user->getActif() == false) {
-            $this->addFlash("Error", "Ton compte est désactivé");
-        }else if($user->getId() != $sortie->getOrganisateur())
+            $this->addFlash("danger", "Ton compte est désactivé");
+            return $this->redirectToRoute('sortie_accueil');
+        }else if($user->getId() != $sortie->getOrganisateur()->getId())
         {
-            $this->addFlash("Error","Tu n'est pas l'organisateur de cette sortie");
+            $this->addFlash("danger","Tu n'es pas l'organisateur de cette sortie");
+            return $this->redirectToRoute('sortie_accueil');
         }else if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             if($request->request->get('cree')){
                 $etat = $etatRepository->findOneBy(['libelle' => 'Créée']);
@@ -163,16 +166,12 @@ class SortieController extends AbstractController
      */
     public function affichageSortie(SortieRepository $sortieRepository, Request $request, int $id): Response
     {
-
         $sortieDetails = $sortieRepository->affichageSortieDetails($id);
         $listeParticipants = $sortieDetails[0]->getParticipant();
         return $this->render('sortie/affichageSortie.html.twig',
                 ["sortieDetails" => $sortieDetails[0],
                 "listeParticipants" => $listeParticipants
             ]);
-
-
-
     }
 
 
@@ -195,10 +194,12 @@ class SortieController extends AbstractController
 
         if ($user->getActif() == false)
         {
-            $this->addFlash("Error","Ton compte est désactivé");
-        } else if($user->getId() != $sortie->getOrganisateur())
+            $this->addFlash("danger","Ton compte est désactivé");
+            return $this->redirectToRoute('sortie_accueil');
+        } else if($user->getId() != $sortie->getOrganisateur()->getId())
         {
-            $this->addFlash("Error","Tu n'est pas l'organisateur de cette sortie");
+            $this->addFlash("danger","Tu n'est pas l'organisateur de cette sortie");
+            return $this->redirectToRoute('sortie_accueil');
         }else if ($sortieForm->isSubmitted() && $sortieForm->isValid())
         {
             $etat = $etatRepository->findOneBy(['libelle' => 'Ouverte']);
@@ -240,17 +241,17 @@ class SortieController extends AbstractController
 
             $entityManager->persist($sortie);
             $entityManager->flush();
-            $this->addFlash('Success', 'Votre sortie a été annulée avec succès');
+            $this->addFlash('success', 'Votre sortie a été annulée avec succès');
             return $this->redirectToRoute('sortie_accueil');
         }
-        if($this->getUser()->getId() == $sortie->getOrganisateur() || $this->getUser()->getAdmin() == true) {
+        if($this->getUser()->getId() == $sortie->getOrganisateur()->getId() || $this->getUser()->getAdmin() == true) {
 
             return $this->render('sortie/cancelSortie.html.twig', [
                 'cancelForm' => $cancelForm->createView(),
                 'sortie' => $sortie,
             ]);
         } else{
-            $this->addFlash('Error', "Tu n'es pas l'admin ou l'organisateur de cette sortie !");
+            $this->addFlash('danger', "Tu n'es pas l'admin ou l'organisateur de cette sortie !");
             return $this->redirectToRoute('sortie_accueil');
         }
     }
@@ -265,11 +266,11 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
         if (new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) < $sortie->getNombreInscriptionsMax()) {
-            $this->addFlash("Error", "T'es trop lent, la sortie n'est plus dispo !");
+            $this->addFlash("danger", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getActif() == false){
-            $this->addFlash("Error","Ton compte est désactivé");
+            $this->addFlash("danger","Ton compte est désactivé");
         } elseif ($user->getCampus() != $sortie->getCampus()){
-            $this->addFlash("Error", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
+            $this->addFlash("danger", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
         } else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
@@ -290,7 +291,7 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($idSortie);
 
         if($sortie->getDate() < new \DateTime()) {
-            $this->addFlash("Error", "Tu ne peux plus de désinscrire petit coquin !");
+            $this->addFlash("danger", "Tu ne peux plus de désinscrire petit coquin !");
         } else{
             $sortie->removeParticipant($user);
             $entityManager->persist($sortie);
@@ -313,7 +314,7 @@ class SortieController extends AbstractController
 
             $entityManager->persist($ville);
             $entityManager->flush();
-            $this->addFlash('Success', 'Votre ville a été ajoutée avec succès');
+            $this->addFlash('success', 'Votre ville a été ajoutée avec succès');
             return $this->redirectToRoute('sortie_accueil');
         }
 
@@ -339,8 +340,8 @@ class SortieController extends AbstractController
 
             $entityManager->persist($lieu);
             $entityManager->flush();
-            $this->addFlash('Success', 'Votre lieu a été ajoutée avec succès');
-            return $this->redirectToRoute('sortie_creationSortie');
+            $this->addFlash('success', 'Votre lieu a été ajoutée avec succès');
+            return $this->redirectToRoute('sortie_creerSortie');
         }
 
         return $this->render('sortie/createLieu.html.twig', [

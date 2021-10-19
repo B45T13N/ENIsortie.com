@@ -19,10 +19,10 @@
         <div>
             {{ form_start(cancelForm) }}
             {{ form_widget(cancelForm) }}
-            <a href="{{ path('sortie_accueil') }}">Annuler</a>
-            <button name="enregistrer" value="annuler">Effacer sortie</button>
+            <a class="btn btn-primary" href="{{ path('sortie_accueil') }}">Annuler</a>
+            <button class="btn btn-primary" name="enregistrer" value="annuler">Effacer sortie</button>
             {{ form_end(cancelForm) }}
-            <a type="btn btn-primary" {{ path('sortie_accueil') }}>Retour</a>
+
         </div>
     </main>
 {% endblock %}
