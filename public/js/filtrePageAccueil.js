@@ -17,7 +17,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
                 trSortieOrga[i].style.display = 'table-row';
             }
         } else {
-            for (var i=0;i<trSortieOrga.length;i+=1){
+            for (i=0;i<trSortieOrga.length;i+=1){
                 trSortieOrga[i].style.display = 'none';
             }
         }
@@ -25,11 +25,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     inscritCheckbox.addEventListener('change', function () {
         if (inscritCheckbox.checked) {
-            for (var i=0;i<trSortieInscrit.length;i+=1){
+            for (i=0;i<trSortieInscrit.length;i+=1){
                 trSortieInscrit[i].style.display = 'table-row';
             }
         } else {
-            for (var i=0;i<trSortieInscrit.length;i+=1){
+            for (i=0;i<trSortieInscrit.length;i+=1){
                 trSortieInscrit[i].style.display = 'none';
             }
         }
@@ -37,24 +37,24 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     pasinscritCheckbox.addEventListener('change', function () {
         if (pasinscritCheckbox.checked) {
-            for (var i=0;i<trSortiePasInscrit.length;i+=1){
+            for (i=0;i<trSortiePasInscrit.length;i+=1){
                 trSortiePasInscrit[i].style.display ='table-row';
             }
         } else {
-            for (var i=0;i<trSortiePasInscrit.length;i+=1){
+            for (i=0;i<trSortiePasInscrit.length;i+=1){
                 trSortiePasInscrit[i].style.display =  'none';
             }
         }
     });
 
     passeCheckbox.addEventListener('change', function () {
-        if (passeCheckbox.checked) {
-            for (var i=0;i<trSortiePasse.length;i+=1){
-                trSortiePasse[i].style.display = 'table-row';
+        if (!passeCheckbox.checked) {
+            for (i=0;i<trSortiePasse.length;i+=1){
+                trSortiePasse[i].style.display = 'none';
             }
         } else {
-            for (var i=0;i<trSortiePasse.length;i+=1){
-                trSortiePasse[i].style.display = 'none';
+            for (i=0;i<trSortiePasse.length;i+=1){
+                trSortiePasse[i].style.display = 'table-row';
             }
         }
     });
