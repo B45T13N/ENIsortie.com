@@ -100,8 +100,22 @@ body{
     background: radial-gradient(farthest-corner at 100% 100%, rgba(2,0,36,1) 0%, rgb(199, 199, 199) 34%, rgb(0, 89, 59) 100%);
     background-attachment: fixed;
 }
-
-
+form{
+    width: 50rem;
+    margin: 0 auto;
+}
+.blocUser{
+    width: 50rem;
+    margin: 0 auto;
+}
+.cadre{
+    border: 1px solid black;
+    padding: 10px;
+    width: 350px;
+    border-radius: 20px;
+    box-shadow: 1px 1px 1px 1px black;
+    background-color: rgba(255, 255, 255, 0.65);
+}
 
 
 
@@ -114,19 +128,6 @@ body{
 
 #titreCréerSortie{
     text-align: center;
-}
-.btnSortie{
-    justify-content: space-between;
-    height: 3rem;
-    display: flex;
-    margin: 0 auto;
-}
-.btnSortiePublier{
-    margin-left: 5rem;
-    width: 50rem;
-}
-.btnSortieCreer{
-    width:50rem ;
 }
 
 /* -- Tableau --*/
@@ -143,10 +144,12 @@ article{
     height: 375px;
     overflow:scroll;
     margin: 20px auto;
+    overflow-y: hidden;
 }
 
 table{
-    margin: 2em;
+    width: 90%;
+    margin: 0 auto;
 }
 
 th, td{

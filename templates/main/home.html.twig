@@ -16,14 +16,14 @@
 
 
         <div class="d-none d-sm-none d-md-block">
-            <h3> Filter les sorties :</h3>
+            <h3> Filtrer les sorties :</h3>
 
             {{ form_start(filtreForm) }}
             {{ form_widget(filtreForm) }}
             <button class="btn btn-primary" type="submit">Rechercher</button>
             {{ form_end(filtreForm) }}
 
-            <div>
+            <div class="blocUser cadre">
                 <div>
                     <input type="checkbox" checked value="orga" name="orga">
                     <label for="orga">Sorties dont je suis l'organisateur/trice</label>
@@ -43,7 +43,7 @@
            </div>
         </div>
 
-        <article class="container d-flex h-100">
+        <article class="d-flex h-100">
             <div class="overflow-scroll">
             {% include 'inc/affichageListe.html.twig' %}
             </div>

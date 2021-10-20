@@ -6,15 +6,15 @@
 
 {% block body %}
     <main class="container-fluid">
-        <div>
+        <div class="blocUser">
             {% if app.user.photo %}
                 <img class="avatar" src="{{ asset('photo/' ~ app.user.photo) }}" alt="Photo de {{ app.user.username }}">
             {% else %}
                 <img class="avatar" src="{{ asset('photo/user.png') }}" alt="Photo de {{ app.user.username }}">
             {% endif %}
+            <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
         </div>
         <div>
-            <h1> Profil de {{ app.user.prenom }} {{ app.user.nom }}</h1>
             {{ form_start(editProfileForm) }}
             {{ form_widget(editProfileForm) }}
             <button class="btn btn-primary">Enregistrer</button>
