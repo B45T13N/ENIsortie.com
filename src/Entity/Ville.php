@@ -30,6 +30,7 @@ class Ville
 
     /**
      * @ORM\Column(type="string", length=6)
+     * @Assert\Length(5)
      * @Assert\Regex ("/[^0-9]/",
      *     match=false,
      *     message="Un code postal doit être constitué uniquement de chiffres.")
@@ -58,7 +59,7 @@ class Ville
 
     public function setNom(string $nom): self
     {
-        $this->nom = $nom;
+        $this->nom = ucfirst(strtolower($nom));
 
         return $this;
     }
