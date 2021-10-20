@@ -33,7 +33,7 @@
         <a class="btn btn-primary" href="{{ path('sortie_accueil') }}">Retour</a>
         {% if app.user.admin == true %}
             <a href="{{ path('utilisateur_desactiver', {'id': user.id}) }}" class="btn btn-primary">Desactiver l'utilisateur</a>
-            <a href="{{ path('utilisateur_supprimer', {'id': user.id}) }}" class="btn btn-primary">Delete User</a>
+            <a href="{{ path('utilisateur_supprimer', {'id': user.id}) }}" class="btn btn-primary">Supprimer utilisateur</a>
         {% endif %}
     </main>
 
