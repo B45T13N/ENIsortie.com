@@ -259,8 +259,6 @@ class SortieController extends AbstractController
             $this->addFlash("danger", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getActif() == false){
             $this->addFlash("danger","Ton compte est désactivé");
-        } elseif ($user->getCampus() != $sortie->getCampus()){
-            $this->addFlash("danger", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
         } else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
