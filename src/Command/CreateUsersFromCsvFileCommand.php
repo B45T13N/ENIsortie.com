@@ -29,7 +29,6 @@ class CreateUsersFromCsvFileCommand extends Command
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        string                 $dataDirectory,
         UserRepository         $userRepository,
         CampusRepository $campusRepository,
         UserPasswordEncoderInterface $userPasswordEncoderInterface
@@ -37,7 +36,6 @@ class CreateUsersFromCsvFileCommand extends Command
     {
         parent::__construct();
         $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
-        $this->dataDirectory = $dataDirectory;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
         $this->campusRepository = $campusRepository;
@@ -62,9 +60,9 @@ class CreateUsersFromCsvFileCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function getDataFromFile(string $fichierCsv): array
+    private function getDataFromFile(string $fichierCsv, string $directory): array
     {
-        $file = $this->dataDirectory . $fichierCsv;
+        $file = $directory . $fichierCsv;
 
         $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
 
@@ -90,11 +88,11 @@ class CreateUsersFromCsvFileCommand extends Command
         return $data;
     }
 
-    public function createUsers(string $fichierCsv): bool
+    public function createUsers(string $fichierCsv,string $directory): bool
     {
         $boolean = true;
 
-        foreach ($this->getDataFromFile($fichierCsv) as $row) {
+        foreach ($this->getDataFromFile($fichierCsv, $directory) as $row) {
             foreach ($row as $value){
 
                     $table2 = explode(';', $value);
@@ -102,9 +100,7 @@ class CreateUsersFromCsvFileCommand extends Command
                     $user = $this->userRepository->findOneBy([
                         'username'=>$table2[0]
                     ]);
-
                     if (!$user){
-
                     $campus = $this->campusRepository->findOneBy(['nom' => $table2[6]]);
                     $user = new User();
                     $user->setUsername($table2[0])

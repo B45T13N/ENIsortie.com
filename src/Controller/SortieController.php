@@ -315,7 +315,6 @@ class SortieController extends AbstractController
 
         $villeForm->handleRequest($request);
         if($villeForm->isSubmitted() && $villeForm->isValid()){
-
             $entityManager->persist($ville);
             $entityManager->flush();
             $this->addFlash('success', 'Votre ville a été ajoutée avec succès');
