@@ -6,6 +6,7 @@ use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=VilleRepository::class)
@@ -21,11 +22,17 @@ class Ville
 
     /**
      * @ORM\Column(type="string", length=70)
+     * @Assert\Regex (pattern="/\d/",
+     *     match=false,
+     *     message="Le nom de la ville doit être constitué uniquement de lettres.")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=6)
+     * @Assert\Regex ("/[^0-9]/",
+     *     match=false,
+     *     message="Un code postal doit être constitué uniquement de chiffres.")
      */
     private $codePostal;
 

@@ -6,6 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -26,21 +27,31 @@ class Sortie
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan(propertyPath="dateLimite",
+     *     message="Vous devez saisir une date supérieur à votre date de clôture d'inscription.")
+     * @Assert\GreaterThan ("today",
+     *     message="Vous devez saisir une date supérieur à la date d'aujourd'hui.")
      */
     private $date;
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\Positive(message="Vous devez saisir une durée en minutes positive.")
      */
     private $duree;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\GreaterThan ("today",
+     *     message="Vous devez saisir une date de clôture d'inscription supérieur à la date d'aujourd'hui.")
+     * @Assert\LessThan(propertyPath="date",
+     *     message="Vous devez saisir une date de clôture des inscriptions inférieur à votre date d'événement.")
      */
     private $dateLimite;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Positive(message="Vous devez saisir un nombre d'inscription positif.")
      */
     private $nombreInscriptionsMax;
 

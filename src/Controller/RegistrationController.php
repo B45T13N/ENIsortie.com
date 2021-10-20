@@ -20,8 +20,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("enregistrementUtilisateur", name="enregistrement")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface,
-                                CreateUsersFromCsvFileCommand $createUsersFromCsvFileCommand
+    public function register(Request $request, UserPasswordEncoderInterface $userPasswordEncoderInterface
                                 ): Response
     {
         $user = new User();
@@ -62,12 +61,13 @@ class RegistrationController extends AbstractController
                                           UserPasswordEncoderInterface $userPasswordEncoderInterface,
                                           CreateUsersFromCsvFileCommand $createUsersFromCsvFileCommand
     ): Response{
-        $directory = '\wamp64\www\ENIsortie.com\public\data';
+        $directory = $this->getParameter('directory1');
 
         if ($request->getMethod()==Request::METHOD_POST){
+
             $file = $request->files->get('fileCsv');
             $file->move($directory, $file->getClientOriginalName());
-            $boolean = $createUsersFromCsvFileCommand->createUsers($file->getClientOriginalName());
+            $boolean = $createUsersFromCsvFileCommand->createUsers($file->getClientOriginalName(), $directory);
 
             if($boolean == true) {
                 $this->addFlash('success', "Utilisateurs crées en BDD");

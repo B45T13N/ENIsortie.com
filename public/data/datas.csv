@@ -1,7 +1,4 @@
-﻿username;nom;prenom;email;telephone;roles;Campus
-Supertoto;Super;Toto;super@toto.fr;6020103;ROLE_USER;Garcia
-pseudo_2;Machinchose;Truc;machin@google.fr;6020104;ROLE_USER;Dumas
-pseudo_3;Duchemin;Marc;duchemin@marc.fr;6010405;ROLE_USER;Dumas
-Superman;Ken;Clarck;clarck@superman.fr;602010504;ROLE_USER;Besnard-sur-Mer
-Spiderman;Parker;Peter;peterparker@orange.fr;602214578;ROLE_USER;Gomezboeuf
-Bob_123;Spounge;Bob;squarepants@bob.fr;621548789;ROLE_USER;Roux-sur-Etienne
+username;nom;prenom;email;telephone;roles;campus
+maurice;lagachettefacile;maurice;maurice@mail.fr;650505050;ROLE_USER;Rey
+Jean-michel;pasDechance;jean-michel;pasDeChance@mail.fr;;ROLE_USER;Rey
+momo45;momo;moto;momo@mail.com;240505050;ROLE_USER;Rey

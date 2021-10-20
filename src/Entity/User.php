@@ -41,21 +41,32 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=50)
+     *  @Assert\Regex (pattern="/\d/",
+     *     match=false,
+     *     message="Votre nom ne peut pas contenir de nombre.")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\Regex (pattern="/\d/",
+     *     match=false,
+     *     message="Votre prénom ne peut pas contenir de nombre.")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Regex ("/[^0-9]/",
+     *     match=false,
+     *     message="Votre numéro de téléphone ne peut contenir que des chiffres.")
+     *
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=70, unique=true)
+     * @Assert\Email(message="Vous ne respectez pas le format email.")
      */
     private $email;
 
