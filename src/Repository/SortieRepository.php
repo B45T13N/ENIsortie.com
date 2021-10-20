@@ -73,35 +73,36 @@ class SortieRepository extends ServiceEntityRepository
         $etatOuvert = $er->findOneBy(['libelle' => 'Ouverte']);
         $etatEnCours = $er->findOneBy(['libelle' => 'Activité en cours']);
         $etatArchivee = $er->findOneBy(['libelle' => 'Archivée']);
+        $aujourdhui = new \DateTime();
 
         foreach ($sorties as $sortie) {
 
-
-            $duree = new DateInterval('PT' . $sortie->getDuree() . 'M');
-            $datefinsortie = date_create_from_format("Y-m-d H:i:s", (date_add($sortie->getDate(), $duree))->format('Y-m-d H:i:s'));
-            dd($datefinsortie == $sortie->getDate());
+//            $datetest = $sortie->getDate();
+//            $duree = new DateInterval('PT' . $sortie->getDuree() . 'M');
+//            $datefinsortie = date_create_from_format("Y-m-d H:i:s", (date_add($sortie->getDate(), $duree))->format('Y-m-d H:i:s'));
+//            dd($datetest);
 
             if($sortie->getEtat()->getLibelle() != 'Annulée') {
 
 
-                if ($sortie->getEtat()->getLibelle() != 'Clôturée' && ($sortie->getDateLimite() < new \DateTime("now") || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                if ($sortie->getEtat()->getLibelle() != 'Clôturée' && ($sortie->getDateLimite() < $aujourdhui || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
                     $sortie->setEtat($etatCloture);
                     $this->_em->persist($sortie);
                 }
 
-                if ($sortie->getEtat()->getLibelle() != 'Ouverte' && ($sortie->getDate() > new \DateTime("now") && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                if ($sortie->getEtat()->getLibelle() != 'Ouverte' && ($sortie->getDate() > $aujourdhui && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
                     $sortie->setEtat($etatOuvert);
                     $this->_em->persist($sortie);
                 }
 
                 if (($sortie->getEtat()->getLibelle() == 'Ouverte' || $sortie->getEtat()->getLibelle() == 'Clôturée') &&
-                    (new \DateTime("now") > $sortie->getDate() && new \DateTime("now") < $datefinsortie)) {
+                    $aujourdhui->format('Y-m-d') == $sortie->getDate()->format('Y-m-d')) {
                     $sortie->setEtat($etatEnCours);
                     $this->_em->persist($sortie);
                 }
 
                 if (($sortie->getEtat()->getLibelle() == 'Activité en cours' || $sortie->getEtat()->getLibelle() == 'Clôturée'
-                    || $sortie->getEtat()->getLibelle() == 'Ouverte') && new \DateTime("now") > $datefinsortie) {
+                    || $sortie->getEtat()->getLibelle() == 'Ouverte') && $aujourdhui->format('Y-m-d') > $sortie->getDate()->format('Y-m-d')) {
                     $sortie->setEtat($etatPasse);
                     $this->_em->persist($sortie);
                 }
