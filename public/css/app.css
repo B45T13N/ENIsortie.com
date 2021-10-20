@@ -176,3 +176,6 @@ span{
 .affichageListeParticipant{
     max-width: fit-content;
 }
+.titreFormulaire{
+    text-align: center;
+}
