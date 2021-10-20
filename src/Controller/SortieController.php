@@ -17,10 +17,12 @@ use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function Sodium\add;
 
 /**
  * @Route("/membre/", name="sortie_")
@@ -222,6 +224,7 @@ class SortieController extends AbstractController
         $cancelForm->handleRequest($request);
 
 
+
         if($cancelForm->isSubmitted() && $cancelForm->isValid()){
 
             $sortie -> setEtat($etat);
@@ -240,7 +243,11 @@ class SortieController extends AbstractController
                 'cancelForm' => $cancelForm->createView(),
                 'sortie' => $sortie,
             ]);
-        } else{
+        } elseif($this->getUser()->getActif() == false) {
+
+            $this->addFlash('danger', 'Ton compte est désactivé !');
+            return $this->redirectToRoute('sortie_accueil');
+        }else {
             $this->addFlash('danger', "Tu n'es pas l'admin ou l'organisateur de cette sortie !");
             return $this->redirectToRoute('sortie_accueil');
         }
@@ -255,7 +262,7 @@ class SortieController extends AbstractController
 
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
-        if (new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite() && sizeof($sortie->getParticipant()) >= $sortie->getNombreInscriptionsMax()) {
+        if ((new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite()) || sizeof($sortie->getParticipant()) >= $sortie->getNombreInscriptionsMax()) {
             $this->addFlash("danger", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getActif() == false){
             $this->addFlash("danger","Ton compte est désactivé");
@@ -305,9 +312,14 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('sortie_accueil');
         }
 
-        return $this->render('sortie/creationVille.html.twig', [
-            'villeForm' => $villeForm->createView()
-        ]);
+        if($this->getUser()->getActif() == false){
+            $this->addFlash('danger', 'Ton compte est désactivé');
+            return $this->redirectToRoute('sortie_accueil');
+        } else {
+            return $this->render('sortie/creationVille.html.twig', [
+                'villeForm' => $villeForm->createView()
+            ]);
+        }
     }
 
 
