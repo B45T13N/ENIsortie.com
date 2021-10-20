@@ -5,10 +5,9 @@
         <div>
             {{ form_start(sortieForm) }}
             {{ form_widget(sortieForm) }}
-            <button name="publier" value="publier">Publier une sortie</button>
-            <button><a href="{{ path('sortie_accueil') }}">Retour</a></button>
+            <button name="publier" value="publier" class="btn btn-primary">Publier une sortie</button>
+            <a class="btn btn-primary" href="javascript:history.go(-1)">Retour</a>
             {{ form_end(sortieForm) }}
-            <a type="btn btn-primary" {{ path('sortie_accueil') }}>Retour</a>
         </div>
     </main>
 

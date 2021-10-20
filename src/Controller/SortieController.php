@@ -8,9 +8,11 @@ use App\Entity\Ville;
 use App\Entity\User;
 use App\Form\CancelType;
 use App\Form\CreationSortieType;
+use App\Form\FiltersType;
 use App\Form\FilterType;
 use App\Form\LieuType;
 use App\Form\VilleType;
+use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
@@ -36,27 +38,20 @@ class SortieController extends AbstractController
     /**
      * @Route("accueil", name="accueil")
      */
-    public function liste(SortieRepository $sortieRepository, Request $request): Response
+    public function liste(SortieRepository $sortieRepository, CampusRepository $campusRepository, Request $request): Response
     {
-
-        $sortie = new Sortie();
-        $sortie->setDate(new \DateTime());
-        $sortie->setDateLimite(new \DateTime('+1 year'));
-        $filtreForm = $this->createForm(FilterType::class, $sortie);
+        $nom = "";
+        $dateDebut = new \DateTime();
+        $dateFin = new \DateTime('+1 year');
+        $campus = $campusRepository->findAll();
+        $filtreForm = $this->createForm(FilterType::class, [$nom, $dateDebut, $dateFin, $campus]);
         $sorties = $sortieRepository->affichageSortieAccueil();
 
         $filtreForm->handleRequest($request);
 
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
             $data = $filtreForm->getData();
-            if($data->getNom())
-            {
-                $sorties = $sortieRepository->filtreSortieAccueil($data->getNom(), $data->getCampus(), $data->getDate(), $data->getDateLimite());
-            } else
-            {
-                $sorties = $sortieRepository->filtreSortieAccueil($data->getNom(), $data->getCampus(), $data->getDate(), $data->getDateLimite());
-            }
-            $this->addFlash('success', 'Votre recherche :');
+            $sorties = $sortieRepository->filtreSortieAccueil($data['nom'], $data['campus'], $data['date'], $data['dateLimite']);
             return $this->render('main/home.html.twig', [
                 'sorties' => $sorties,
                 'filtreForm' => $filtreForm->createView(),
@@ -87,11 +82,6 @@ class SortieController extends AbstractController
         $sortie->setCampus($currentUser->getCampus());
 
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-        if ($sortie->getDateLimite() > $sortie->getDate()) {
-            $this->addFlash('error',
-                'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
-            );
-        }
 
         $sortieForm->handleRequest($request);
         $etat = $etatRepository;
@@ -273,8 +263,6 @@ class SortieController extends AbstractController
             $this->addFlash("danger", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getActif() == false){
             $this->addFlash("danger","Ton compte est désactivé");
-        } elseif ($user->getCampus() != $sortie->getCampus()){
-            $this->addFlash("danger", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
         } else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
@@ -329,7 +317,7 @@ class SortieController extends AbstractController
 
 
     /**
-     * @Route("/ajouterLieu/", name="ajouterLieu")
+     * @Route("ajouterLieu/", name="ajouterLieu")
      */
     public function ajouterLieu(
         Request                $request,
@@ -350,7 +338,22 @@ class SortieController extends AbstractController
         return $this->render('sortie/createLieu.html.twig', [
             'lieuForm' => $lieuForm->createView(),
         ]);
+    }
 
+    /**
+     * @Route("admin/archiver", name="archivageSortie")
+     */
+    public function archivage(
+        Request $request,
+        SortieRepository $sortieRepository
+    )
+    {
+        $sorties = $sortieRepository->affichageSortieAccueil();
+        $sortieRepository->archivage($sorties);
+
+        $this->addFlash('success', 'Archivage réussi');
+
+        return $this->redirectToRoute('sortie_accueil');
     }
 
 }

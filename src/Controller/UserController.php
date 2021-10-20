@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\User;
 use App\Form\ProfileType;
 use App\Repository\SortieRepository;
@@ -48,7 +47,7 @@ class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Votre profil a bien été modifier !!');
+                $this->addFlash('success', 'Votre profil a bien été modifié !');
                 return $this->redirectToRoute('sortie_accueil', ['id' => $user->getId()]);
 
             }

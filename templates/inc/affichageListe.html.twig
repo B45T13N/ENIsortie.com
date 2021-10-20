@@ -1,5 +1,6 @@
 
 {% set class = "" %}
+{% set stylePasse = "table-row" %}
 {% set break = false %}
 
 <table class="align-self-center ">
@@ -55,9 +56,10 @@
             {% endif %}
             {% if sortie.etat.libelle == 'Passée' %}
                 {% set class = class ~ " passe" %}
+                {% set stylePasse = "none" %}
             {% endif %}
 
-            <tr class="trSortie {{ class }}">
+            <tr class="trSortie {{ class }}" style="display: {{ stylePasse }}">
 
             {% set class = "" %}
 
@@ -95,7 +97,7 @@
                         {% if sortie.etat.libelle != 'Annulée'%}
                             <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                         {% endif %}
-                        {% if sortie.etat.libelle is same as("Ouverte") and app.user.campus == sortie.campus %}
+                        {% if sortie.etat.libelle is same as("Ouverte")%}
                             {% set break = false %}
                             {#  Condition pour affichage de s'inscrire ou se désister                              #}
                             {% for participant in sortie.participant %}
@@ -123,11 +125,11 @@
                         {% if sortie.etat.libelle is same as("Créée") and app.user.id is same as(sortie.organisateur.id) %}
                              <a href="{{ path('sortie_publierSortie', {'idSortie' : sortie.id })  }}">Publier</a>
                         {% endif %}
-
                     {% endif %}
                 {% endif %}
             </td>
         </tr>
+        {% set stylePasse = "table-row" %}
     {% endfor %}
     </tbody>
 </table>

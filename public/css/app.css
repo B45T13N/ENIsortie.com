@@ -1,16 +1,9 @@
+*{
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 html{
     height: 100%;
-}
-body{
-    min-height: 100%;
-
-    position: relative;
-}
-footer{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
 img {
     max-width: 150px;
@@ -76,6 +69,10 @@ footer{
     display: block;
     text-align: center;
     background: rgba(255, 255, 255, 0.51);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 header{
     margin-top: 1em;
@@ -99,6 +96,9 @@ body{
     background: rgb(2,0,36);
     background: radial-gradient(farthest-corner at 100% 100%, rgba(2,0,36,1) 0%, rgb(199, 199, 199) 34%, rgb(0, 89, 59) 100%);
     background-attachment: fixed;
+    min-height: 100%;
+    padding-bottom: 3em;
+    position: relative;
 }
 form{
     width: 50rem;
