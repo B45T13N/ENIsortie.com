@@ -19,7 +19,7 @@
         <div>
             {{ form_start(cancelForm) }}
             {{ form_widget(cancelForm) }}
-            <a class="btn btn-primary" href="{{ path('sortie_accueil') }}">Annuler</a>
+            <a class="btn btn-primary" href="javascript:history.go(-1)">Retour</a>
             <button class="btn btn-primary" name="enregistrer" value="annuler">Effacer sortie</button>
             {{ form_end(cancelForm) }}
 

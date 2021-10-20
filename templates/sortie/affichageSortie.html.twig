@@ -18,7 +18,7 @@
         <p class="affichageArticle">Code postal : <span>{{ sortieDetails.lieu.ville.codePostal }}</span></p>
         <p class="affichageArticle">Latitude : <span>{{ sortieDetails.lieu.latitude }}</span></p>
         <p class="affichageArticle">Longitude : <span>{{ sortieDetails.lieu.longitude }}</span></p>
-        <a class="btn btn-primary" href="{{ path('sortie_accueil') }}">Retour</a>
+        <a class="btn btn-primary" href="javascript:history.go(-1)">Retour</a>
 
         <h3>Liste des participants inscrits :</h3>
         <article class="affichageListeParticipant">

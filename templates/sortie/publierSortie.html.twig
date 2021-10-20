@@ -6,7 +6,7 @@
             {{ form_start(sortieForm) }}
             {{ form_widget(sortieForm) }}
             <button name="publier" value="publier" class="btn btn-primary">Publier une sortie</button>
-            <a href="{{ path('sortie_accueil') }}" class="btn btn-primary">Retour</a>
+            <a class="btn btn-primary" href="javascript:history.go(-1)">Retour</a>
             {{ form_end(sortieForm) }}
         </div>
     </main>
