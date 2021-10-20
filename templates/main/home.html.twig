@@ -19,6 +19,7 @@
             <h3> Filtrer les sorties :</h3>
 
             {{ form_start(filtreForm) }}
+            {{ form_row(filtreForm.campus, { 'choice' : 'Tout les campus'}) }}
             {{ form_widget(filtreForm) }}
             <button class="btn btn-primary" type="submit">Rechercher</button>
             {{ form_end(filtreForm) }}
@@ -52,6 +53,12 @@
         <div class="boutonCreateSortie d-none d-sm-none d-md-block">
             <a href="{{ path('sortie_creerSortie') }}" class="btn btn-lg btn-primary" type="button">Créer une sortie</a>
         </div>
+        {% if app.user.admin == true %}
+            <div>
+                <a class="btn btn-primary" href="{{ path('sortie_archivageSortie') }}">Archiver les sortie</a>
+            </div>
+        {% endif %}
+
     </main>
 {% endblock %}
 

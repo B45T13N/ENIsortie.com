@@ -21,7 +21,8 @@ class FilterType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'label' => 'Campus',
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'required' => false
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Le nom de la sortie contient :',
@@ -45,7 +46,7 @@ class FilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Sortie::class,
+
         ]);
     }
 }

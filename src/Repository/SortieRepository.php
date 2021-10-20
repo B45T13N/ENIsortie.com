@@ -35,8 +35,6 @@ class SortieRepository extends ServiceEntityRepository
 
         $sorties = $query->getResult();
 
-        $this->archivage($sorties);
-
         return $query->getResult();
     }
 
@@ -47,20 +45,21 @@ class SortieRepository extends ServiceEntityRepository
         $queryBuilder->leftJoin('s.etat', 'e')->addSelect('e');
         $queryBuilder->leftJoin('s.organisateur', 'u')->addSelect('u');
         $queryBuilder->leftJoin('s.participant', 'su')->addSelect('su');
-        $queryBuilder->where('s.campus = ' . $campus->getId());
+        if($campus != null) {
+            $queryBuilder->where('s.campus = ' . $campus->getId());
+        }
         if ($nom !== "") {
             $queryBuilder->andWhere('s.nom LIKE :nom');
             $queryBuilder->setParameter('nom', '%' . $nom . '%');
         }
-        $queryBuilder->andWhere('s.date BETWEEN :firstDate AND :lastDate');
-        $queryBuilder->setParameter('firstDate', $date1)
-            ->setParameter('lastDate', $date2);
+        if($date1 != null && $date2 !=null) {
+            $queryBuilder->andWhere('s.date BETWEEN :firstDate AND :lastDate');
+            $queryBuilder->setParameter('firstDate', $date1)
+                ->setParameter('lastDate', $date2);
+        }
 
 
         $query = $queryBuilder->getQuery();
-
-        $sorties = $query->getResult();
-        $this->archivage($sorties);
 
         return $query->getResult();
     }
@@ -77,32 +76,37 @@ class SortieRepository extends ServiceEntityRepository
 
         foreach ($sorties as $sortie) {
 
-            if ($sortie->getEtat()->getLibelle() != 'Passée' && $sortie->getEtat()->getLibelle() != 'Annulée' && $sortie->getDate() < new \DateTime())
-            {
-                $sortie->setEtat($etatPasse);
-                $this->_em->persist($sortie);
-            }
 
-            if ($sortie->getEtat()->getLibelle() != 'Clôturée' && $sortie->getEtat()->getLibelle() != 'Annulée'
-                && ($sortie->getDateLimite() < new \DateTime() || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
-                $sortie->setEtat($etatCloture);
-                $this->_em->persist($sortie);
-            }
+            $duree = new DateInterval('PT' . $sortie->getDuree() . 'M');
+            $datefinsortie = date_create_from_format("Y-m-d H:i:s", (date_add($sortie->getDate(), $duree))->format('Y-m-d H:i:s'));
+            dd($datefinsortie == $sortie->getDate());
 
-            if ($sortie->getEtat()->getLibelle() != 'Ouverte' && $sortie->getEtat()->getLibelle() != 'Annulée'
-                && ($sortie->getDate() > new \DateTime() && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant())))
-            {
-                $sortie->setEtat($etatOuvert);
-                $this->_em->persist($sortie);
-            }
+            if($sortie->getEtat()->getLibelle() != 'Annulée') {
 
-            if ($sortie->getEtat()->getLibelle() == 'Ouverte' && (new \DateTime() > $sortie->getDate() &&
-                $sortie->getDate() < new \DateTime($sortie->getDuree() . 'minutes')))
-            {
-                $sortie->setEtat($etatEnCours);
-                $this->_em->persist($sortie);
-            }
 
+                if ($sortie->getEtat()->getLibelle() != 'Clôturée' && ($sortie->getDateLimite() < new \DateTime("now") || $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                    $sortie->setEtat($etatCloture);
+                    $this->_em->persist($sortie);
+                }
+
+                if ($sortie->getEtat()->getLibelle() != 'Ouverte' && ($sortie->getDate() > new \DateTime("now") && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                    $sortie->setEtat($etatOuvert);
+                    $this->_em->persist($sortie);
+                }
+
+                if (($sortie->getEtat()->getLibelle() == 'Ouverte' || $sortie->getEtat()->getLibelle() == 'Clôturée') &&
+                    (new \DateTime("now") > $sortie->getDate() && new \DateTime("now") < $datefinsortie)) {
+                    $sortie->setEtat($etatEnCours);
+                    $this->_em->persist($sortie);
+                }
+
+                if (($sortie->getEtat()->getLibelle() == 'Activité en cours' || $sortie->getEtat()->getLibelle() == 'Clôturée'
+                    || $sortie->getEtat()->getLibelle() == 'Ouverte') && new \DateTime("now") > $datefinsortie) {
+                    $sortie->setEtat($etatPasse);
+                    $this->_em->persist($sortie);
+                }
+
+            }
             if ($sortie->getDate() < new \DateTime('-1 month')) {
                 $sortie->setEtat($etatArchivee);
                 $this->_em->persist($sortie);

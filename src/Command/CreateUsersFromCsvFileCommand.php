@@ -21,9 +21,6 @@ use Symfony\Component\Serializer\Serializer;
 class CreateUsersFromCsvFileCommand extends Command
 {
     private EntityManagerInterface $entityManager;
-    private string $dataDirectory;
-
-    private SymfonyStyle $io;
 
     private UserRepository $userRepository;
 

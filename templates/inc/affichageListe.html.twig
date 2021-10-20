@@ -95,7 +95,7 @@
                         {% if sortie.etat.libelle != 'Annulée'%}
                             <a href="{{ path('sortie_affichageSortie', {'id':sortie.id})}}" >Afficher</a>
                         {% endif %}
-                        {% if sortie.etat.libelle is same as("Ouverte") and app.user.campus == sortie.campus %}
+                        {% if sortie.etat.libelle is same as("Ouverte")%}
                             {% set break = false %}
                             {#  Condition pour affichage de s'inscrire ou se désister                              #}
                             {% for participant in sortie.participant %}
