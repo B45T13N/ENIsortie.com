@@ -52,6 +52,7 @@ class SortieController extends AbstractController
         if ($filtreForm->isSubmitted() && $filtreForm->isValid()) {
             $data = $filtreForm->getData();
             $sorties = $sortieRepository->filtreSortieAccueil($data['nom'], $data['campus'], $data['date'], $data['dateLimite']);
+            $this->addFlash('success', 'Votre recherche :');
             return $this->render('main/home.html.twig', [
                 'sorties' => $sorties,
                 'filtreForm' => $filtreForm->createView(),
@@ -82,6 +83,11 @@ class SortieController extends AbstractController
         $sortie->setCampus($currentUser->getCampus());
 
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
+        if ($sortie->getDateLimite() > $sortie->getDate()) {
+            $this->addFlash('error',
+                'Vous devez avoir une date de clôture inférieur à la date de l"évenement ! '
+            );
+        }
 
         $sortieForm->handleRequest($request);
         $etat = $etatRepository;
