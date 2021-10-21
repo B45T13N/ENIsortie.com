@@ -175,6 +175,7 @@ span{
 
 .affichageListeParticipant{
     max-width: fit-content;
+    padding: 20px;
 }
 .titreFormulaire{
     text-align: center;
