@@ -90,7 +90,7 @@ class SortieRepository extends ServiceEntityRepository
                     $this->_em->persist($sortie);
                 }
 
-                if ($sortie->getEtat()->getLibelle() != 'Ouverte' && ($sortie->getDate() > $aujourdhui && $sortie->getNombreInscriptionsMax() === sizeof($sortie->getParticipant()))) {
+                if ($sortie->getEtat()->getLibelle() != 'Ouverte' && $sortie->getDate() > $aujourdhui && $sortie->getNombreInscriptionsMax() < sizeof($sortie->getParticipant())) {
                     $sortie->setEtat($etatOuvert);
                     $this->_em->persist($sortie);
                 }

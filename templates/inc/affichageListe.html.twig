@@ -125,6 +125,22 @@
                         {% if sortie.etat.libelle is same as("Créée") and app.user.id is same as(sortie.organisateur.id) %}
                              <a href="{{ path('sortie_publierSortie', {'idSortie' : sortie.id })  }}">Publier</a>
                         {% endif %}
+                        {% if sortie.etat.libelle is same as("Ouverte")%}
+                            {% set break = false %}
+                            {#  Condition pour affichage de s'inscrire ou se désister                              #}
+                            {% for participant in sortie.participant %}
+                                {% if app.user.id is same as(participant.id) %}
+                                    <a href="{{ path('sortie_seDesister', {'idSortie' : sortie.id}) }}">- Se désister</a>
+                                    {% set break = true %}
+                                {% elseif loop.last and not break and sortie.participant|length < sortie.nombreInscriptionsMax %}
+                                    <a href="{{ path('sortie_sinscrire', {'idSortie': sortie.id}) }}">- S'inscrire1</a>
+                                {% endif %}
+                            {% else %}
+                                {% if sortie.participant|length < sortie.nombreInscriptionsMax %}
+                                    <a href="{{ path('sortie_sinscrire', {'idSortie': sortie.id}) }}">- S'inscrire2</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </td>
