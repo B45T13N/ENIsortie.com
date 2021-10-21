@@ -59,7 +59,7 @@ class CreateUsersFromCsvFileCommand extends Command
 
     private function getDataFromFile(string $fichierCsv, string $directory): array
     {
-        $file = $directory . $fichierCsv;
+        $file = $directory . '/'. $fichierCsv;
 
         $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
 

@@ -78,9 +78,9 @@ class SortieRepository extends ServiceEntityRepository
         foreach ($sorties as $sortie) {
 
 //            $datetest = $sortie->getDate();
-//            $duree = new DateInterval('PT' . $sortie->getDuree() . 'M');
-//            $datefinsortie = date_create_from_format("Y-m-d H:i:s", (date_add($sortie->getDate(), $duree))->format('Y-m-d H:i:s'));
-//            dd($datetest);
+//            $duree = new \DateInterval('PT' . $sortie->getDuree() . 'M');
+//            $datefinsortie = date_add($datetest, $duree);
+//            dd($sortie->getDate() === $datefinsortie);
 
             if($sortie->getEtat()->getLibelle() != 'Annulée') {
 
