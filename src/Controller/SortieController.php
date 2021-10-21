@@ -262,7 +262,7 @@ class SortieController extends AbstractController
 
         $user = $this->getUser();
         $sortie = $sortieRepository->find($idSortie);
-        if ((new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite()) || sizeof($sortie->getParticipant()) >= $sortie->getNombreInscriptionsMax()) {
+        if ( ($sortie->getEtat()->getLibelle() == 'Clôturée')|| (new \DateTime() > $sortie->getDate() && new \DateTime() > $sortie->getDateLimite()) || sizeof($sortie->getParticipant()) == $sortie->getNombreInscriptionsMax()) {
             $this->addFlash("danger", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getActif() == false){
             $this->addFlash("danger","Ton compte est désactivé");
