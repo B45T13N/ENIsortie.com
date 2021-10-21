@@ -8,11 +8,9 @@ use App\Entity\Ville;
 use App\Entity\User;
 use App\Form\CancelType;
 use App\Form\CreationSortieType;
-use App\Form\FiltersType;
 use App\Form\FilterType;
 use App\Form\LieuType;
 use App\Form\VilleType;
-use App\Repository\CampusRepository;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
@@ -212,7 +210,6 @@ class SortieController extends AbstractController
 
     }
 
-
     /**
      *
      * @Route("annulerSortie/{idSortie}", name="annulerSortie")
@@ -270,6 +267,8 @@ class SortieController extends AbstractController
             $this->addFlash("danger", "T'es trop lent, la sortie n'est plus dispo !");
         } elseif($user->getActif() == false){
             $this->addFlash("danger","Ton compte est désactivé");
+        } elseif ($user->getCampus() != $sortie->getCampus()){
+            $this->addFlash("danger", "Tu ne peux pas t'inscrire sur une sortie qui n'est pas dans ton campus !");
         } else{
             $sortie->addParticipant($user);
             $entityManager->persist($sortie);
@@ -299,7 +298,6 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('sortie_accueil');
 
     }
-
     /**
      * @Route("ajouterVille", name="ajouterVille")
      */
@@ -363,9 +361,6 @@ class SortieController extends AbstractController
         $sorties = $sortieRepository->affichageSortieAccueil();
         $sortieRepository->archivage($sorties);
 
-        $this->addFlash('success', 'Archivage réussi');
-
-        return $this->redirectToRoute('sortie_accueil');
     }
 
 }

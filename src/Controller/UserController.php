@@ -80,7 +80,7 @@ class UserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Utilisateur bien désactivé ');
+        $this->addFlash('success', 'Utilisateur ' . $user->getUsername() . ' a bien été désactivé!');
 
         return $this->redirectToRoute('sortie_accueil');
     }
@@ -93,7 +93,7 @@ class UserController extends AbstractController
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Utilisateur bien supprimé');
+        $this->addFlash('success', 'Utilisateur' . $user->getUsername()  . ' a bien supprimé');
 
         return $this->redirectToRoute('sortie_accueil');
     }
